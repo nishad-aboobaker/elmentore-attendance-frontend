@@ -46,7 +46,7 @@ export class AdminDashboardComponent implements OnInit {
         this.stats.totalEmployees = activeEmployees.length;
 
         if (todaysSessions.length === 0) {
-           this.stats.absent = this.stats.totalEmployees;
+           this.stats.absent = 0; // Nobody is absent if there are no sessions!
            return;
         }
 
