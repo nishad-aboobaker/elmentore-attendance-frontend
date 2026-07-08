@@ -1,8 +1,10 @@
 /* Employee Dashboard — Reference Design */
 .emp-dashboard {
   background: var(--bg-app);
-  min-height: calc(100vh - 60px - 68px);
-  padding-bottom: 24px;
+  height: calc(100vh - 60px - 68px); /* 60px top header, 68px bottom nav */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   animation: fadeIn 0.3s ease;
 }
 
@@ -163,10 +165,21 @@
 }
 
 /* ---- SESSION LIST (reference: date badge + title + time + status chip) ---- */
+.upcoming-section {
+  padding: 0 16px 4px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .session-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
 }
 
 .session-item {
@@ -272,4 +285,8 @@
 @media (max-width: 600px) {
   .greeting-name { font-size: 1.375rem; }
   .checkin-clock { font-size: 2.5rem; }
+  .checkin-card {
+    padding: 20px 24px 16px;
+    margin: 0 16px 16px;
+  }
 }
