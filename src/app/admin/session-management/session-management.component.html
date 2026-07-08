@@ -51,6 +51,34 @@
         <textarea matInput formControlName="agenda" rows="2" placeholder="Session agenda or description"></textarea>
       </mat-form-field>
 
+      <div class="geofence-section" style="margin-bottom: 20px;">
+        <mat-checkbox formControlName="enforceGeofence" color="primary">
+          Enforce Geofence for Check-in
+        </mat-checkbox>
+
+        <div *ngIf="sessionForm.get('enforceGeofence')?.value" formGroupName="location" class="location-fields" style="margin-top: 15px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+          <label class="field-label">Venue Name</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="name" placeholder="e.g. Main Office">
+          </mat-form-field>
+
+          <div class="form-row">
+            <div class="form-col">
+              <label class="field-label">Latitude</label>
+              <mat-form-field appearance="outline" class="full-width">
+                <input matInput type="number" formControlName="lat" placeholder="e.g. 37.7749">
+              </mat-form-field>
+            </div>
+            <div class="form-col">
+              <label class="field-label">Longitude</label>
+              <mat-form-field appearance="outline" class="full-width">
+                <input matInput type="number" formControlName="lng" placeholder="e.g. -122.4194">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="form-actions">
         <button mat-button type="button" (click)="cancelForm()" class="cancel-btn">Cancel</button>
         <button mat-raised-button color="primary" type="submit" [disabled]="sessionForm.invalid" class="save-btn">

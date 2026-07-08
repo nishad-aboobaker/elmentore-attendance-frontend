@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SessionService } from '../../shared/services/session.service';
 import { WorkingDay } from '../../shared/models/session.model';
 import { AuthService } from '../../shared/services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SessionDetailsDialogComponent } from './session-details-dialog.component';
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -17,7 +19,8 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private sessionService: SessionService,
-    public authService: AuthService
+    public authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -36,5 +39,12 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     const h = now.getHours().toString().padStart(2, '0');
     const m = now.getMinutes().toString().padStart(2, '0');
     this.currentTime = `${h}:${m}`;
+  }
+
+  openSessionDetails(session: WorkingDay): void {
+    this.dialog.open(SessionDetailsDialogComponent, {
+      width: '400px',
+      data: session
+    });
   }
 }

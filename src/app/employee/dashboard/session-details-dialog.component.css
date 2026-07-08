@@ -1,0 +1,49 @@
+.dialog-title {
+  margin: 0 0 15px 0;
+  font-weight: 600;
+  color: #333;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 300px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.detail-row mat-icon {
+  color: #1976d2;
+  margin-top: 2px;
+}
+
+.detail-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-text strong {
+  font-size: 13px;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-text p {
+  margin: 2px 0 0 0;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.highlight-row {
+  background: #fff5f5;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+}

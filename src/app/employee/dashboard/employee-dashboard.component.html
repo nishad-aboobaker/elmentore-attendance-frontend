@@ -55,7 +55,7 @@
       <p>No upcoming sessions</p>
     </div>
     <div class="session-list" *ngIf="upcomingSessions.length > 0">
-      <div class="session-item" *ngFor="let s of upcomingSessions">
+      <div class="session-item" *ngFor="let s of upcomingSessions" (click)="openSessionDetails(s)" style="cursor: pointer;">
         <div class="session-date-badge">
           <span class="date-day">{{ s.date | date:'d' }}</span>
           <span class="date-month">{{ s.date | date:'MMM' }}</span>

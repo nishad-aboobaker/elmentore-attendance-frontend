@@ -1,0 +1,55 @@
+<h2 mat-dialog-title class="dialog-title">Session Details</h2>
+
+<mat-dialog-content class="dialog-content">
+  <div class="detail-row">
+    <mat-icon>title</mat-icon>
+    <div class="detail-text">
+      <strong>Title</strong>
+      <p>{{ session.title }}</p>
+    </div>
+  </div>
+
+  <div class="detail-row">
+    <mat-icon>event</mat-icon>
+    <div class="detail-text">
+      <strong>Date</strong>
+      <p>{{ session.date | date:'longDate' }}</p>
+    </div>
+  </div>
+
+  <div class="detail-row">
+    <mat-icon>schedule</mat-icon>
+    <div class="detail-text">
+      <strong>Time</strong>
+      <p>{{ session.startTime }} – {{ session.endTime }}</p>
+    </div>
+  </div>
+
+  <div class="detail-row" *ngIf="session.agenda">
+    <mat-icon>assignment</mat-icon>
+    <div class="detail-text">
+      <strong>Agenda</strong>
+      <p>{{ session.agenda }}</p>
+    </div>
+  </div>
+
+  <div class="detail-row" *ngIf="session.location?.name">
+    <mat-icon>place</mat-icon>
+    <div class="detail-text">
+      <strong>Venue</strong>
+      <p>{{ session.location?.name }}</p>
+    </div>
+  </div>
+
+  <div class="detail-row highlight-row" *ngIf="session.enforceGeofence">
+    <mat-icon color="warn">location_on</mat-icon>
+    <div class="detail-text">
+      <strong style="color: #f44336;">Geofencing Enforced</strong>
+      <p>You must be at the venue to check in.</p>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>

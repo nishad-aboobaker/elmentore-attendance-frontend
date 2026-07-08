@@ -22,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,6 +37,7 @@ import { AttendanceReportsComponent } from './admin/attendance-reports/attendanc
 import { EmployeeDashboardComponent } from './employee/dashboard/employee-dashboard.component';
 import { MarkAttendanceComponent } from './employee/mark-attendance/mark-attendance.component';
 import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.component';
+import { SessionDetailsDialogComponent } from './employee/dashboard/session-details-dialog.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.co
     AttendanceReportsComponent,
     EmployeeDashboardComponent,
     MarkAttendanceComponent,
-    MyAttendanceComponent
+    MyAttendanceComponent,
+    SessionDetailsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -76,7 +79,8 @@ import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.co
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
