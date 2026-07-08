@@ -1,0 +1,270 @@
+/* Admin Dashboard — Reference Design */
+.admin-dashboard {
+  background: var(--bg-app);
+  min-height: calc(100vh - 60px - 68px);
+  padding-bottom: 24px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ---- ADMIN HEADER ---- */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 20px 16px;
+}
+
+.admin-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.admin-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin: 0;
+}
+
+.notif-btn {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--text-secondary) !important;
+  margin-top: 4px;
+}
+
+/* ---- DAILY ATTENDANCE CARD (gauge) ---- */
+.daily-card {
+  margin: 0 16px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-card);
+}
+
+.daily-left { flex: 1; }
+
+.daily-label {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
+.daily-percent {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0 0 4px;
+}
+
+.daily-sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin: 0;
+}
+
+.gauge-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.gauge-svg { width: 80px; height: 80px; }
+
+.gauge-icon {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 28px;
+  height: 28px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+}
+
+.gauge-icon mat-icon {
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+  color: #fff !important;
+}
+
+/* ---- STAT PILLS ROW (Present / Absent) ---- */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 16px 10px;
+}
+.stats-row.single {
+  grid-template-columns: 1fr;
+}
+
+.stat-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.pill-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.pill-header mat-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.pill-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pill-number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.present-pill .pill-header mat-icon,
+.present-pill .pill-label { color: var(--success); }
+.present-pill .pill-number { color: var(--text-primary); }
+
+.absent-pill .pill-header mat-icon,
+.absent-pill .pill-label { color: var(--danger); }
+.absent-pill .pill-number { color: var(--text-primary); }
+
+.late-pill .pill-header mat-icon,
+.late-pill .pill-label { color: var(--warning); }
+.late-pill .pill-number { color: var(--text-primary); }
+
+/* ---- SESSION OVERVIEW / APPROVALS CARD ---- */
+.section-card {
+  margin: 0 16px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.session-approvals { display: flex; flex-direction: column; gap: 12px; }
+
+.approval-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.approval-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.approval-info { flex: 1; }
+
+.approval-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+}
+
+.approval-sub {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+.status-chip {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  flex-shrink: 0;
+}
+.chip-active { background: var(--success-light); color: var(--success-text); }
+.chip-upcoming { background: var(--primary-light); color: var(--primary); }
+.chip-done { background: var(--absent-light); color: var(--text-muted); }
+
+/* ---- QUICK ACTIONS ---- */
+.quick-actions {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-full-btn {
+  width: 100% !important;
+  height: 48px !important;
+  font-size: 0.9375rem !important;
+  font-weight: 600 !important;
+  border-radius: var(--r-md) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  justify-content: center !important;
+}
+
+.action-full-btn.outline {
+  background: var(--bg-card) !important;
+  color: var(--primary) !important;
+  border: 2px solid var(--primary) !important;
+  box-shadow: none !important;
+}
+
+/* empty state */
+.empty-state {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-muted);
+}
+.empty-state mat-icon { font-size: 28px !important; width: 28px !important; height: 28px !important; opacity: 0.4; margin-bottom: 8px; }
+.empty-state p { margin: 0; font-size: 0.875rem; font-weight: 500; }
+
+@media (max-width: 600px) {
+  .admin-title { font-size: 1.25rem; }
+  .daily-percent { font-size: 1.75rem; }
+}

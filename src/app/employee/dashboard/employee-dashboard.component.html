@@ -1,0 +1,75 @@
+<div class="emp-dashboard">
+
+  <!-- Greeting Header (reference: "WEDNESDAY, JUL 8 / Hello, Sarah") -->
+  <div class="greeting-header">
+    <div>
+      <p class="greeting-date">{{ today | date:'EEEE, MMM d' | uppercase }}</p>
+      <h1 class="greeting-name">Hello, {{ ((authService.currentUser$ | async)?.name || '').split(' ')[0] }}</h1>
+    </div>
+    <button class="notif-btn" mat-icon-button>
+      <mat-icon>notifications</mat-icon>
+    </button>
+  </div>
+
+  <!-- Check-In Card (the big blue card in reference) -->
+  <div class="checkin-card">
+    <p class="checkin-hint" *ngIf="activeSessions.length === 0">No active session right now</p>
+    <p class="checkin-hint" *ngIf="activeSessions.length > 0">{{ activeSessions[0].title }}</p>
+    <div class="checkin-clock">{{ currentTime }}</div>
+    <a class="checkin-btn-wrap" [routerLink]="activeSessions.length > 0 ? '/employee/mark-attendance/' + activeSessions[0]._id : null">
+      <div class="checkin-circle" [class.disabled]="activeSessions.length === 0">
+        <mat-icon>login</mat-icon>
+      </div>
+    </a>
+    <p class="checkin-label">{{ activeSessions.length > 0 ? 'CHECK IN' : 'NO SESSION' }}</p>
+  </div>
+
+  <!-- Monthly Summary -->
+  <div class="section-row" style="padding: 0 16px;">
+    <span class="section-title">Monthly Summary</span>
+    <span class="month-badge">{{ today | date:'MMMM' }}</span>
+  </div>
+
+  <div class="monthly-grid">
+    <div class="summary-stat">
+      <span class="stat-number blue">{{ activeSessions.length }}</span>
+      <span class="stat-label">Active Sessions</span>
+    </div>
+    <div class="summary-stat">
+      <span class="stat-number orange">{{ upcomingSessions.length }}</span>
+      <span class="stat-label">Upcoming</span>
+    </div>
+    <div class="summary-stat">
+      <span class="stat-number green">—</span>
+      <span class="stat-label">Total Hours</span>
+    </div>
+  </div>
+
+  <!-- Upcoming Sessions section -->
+  <div style="padding: 0 16px 4px;">
+    <div class="section-row">
+      <span class="section-title">Upcoming Sessions</span>
+    </div>
+    <div *ngIf="upcomingSessions.length === 0" class="empty-state">
+      <mat-icon>event_available</mat-icon>
+      <p>No upcoming sessions</p>
+    </div>
+    <div class="session-list" *ngIf="upcomingSessions.length > 0">
+      <div class="session-item" *ngFor="let s of upcomingSessions">
+        <div class="session-date-badge">
+          <span class="date-day">{{ s.date | date:'d' }}</span>
+          <span class="date-month">{{ s.date | date:'MMM' }}</span>
+        </div>
+        <div class="session-item-info">
+          <p class="session-item-title">{{ s.title }}</p>
+          <p class="session-item-time">
+            <mat-icon style="font-size:13px;width:13px;height:13px;vertical-align:middle;">schedule</mat-icon>
+            {{ s.startTime }} – {{ s.endTime }}
+          </p>
+        </div>
+        <span class="badge badge-upcoming">Upcoming</span>
+      </div>
+    </div>
+  </div>
+
+</div>

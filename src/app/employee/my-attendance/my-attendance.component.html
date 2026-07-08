@@ -1,0 +1,62 @@
+<div class="history-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Attendance History</h1>
+    <button mat-icon-button class="filter-btn">
+      <mat-icon>tune</mat-icon>
+    </button>
+  </div>
+
+  <!-- Overall Attendance Card (reference: "OVERALL ATTENDANCE 94.5% Above Target") -->
+  <div class="overall-card">
+    <div class="overall-left">
+      <p class="overall-label">OVERALL ATTENDANCE</p>
+      <p class="overall-percent">{{ overallPercent }}%</p>
+      <span class="target-badge" [class.above]="overallPercent >= 75" [class.below]="overallPercent < 75">
+        {{ overallPercent >= 75 ? 'Above Target' : 'Below Target' }}
+      </span>
+    </div>
+    <div class="overall-stats">
+      <div class="mini-stat">
+        <span class="mini-num green">{{ presentCount }}</span>
+        <span class="mini-label">Days Present</span>
+      </div>
+      <div class="mini-stat">
+        <span class="mini-num orange">{{ lateCount }}</span>
+        <span class="mini-label">Late Arrivals</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Records List (reference: date box on left + check in/out times + status chip) -->
+  <div *ngIf="records.length === 0" class="empty-history">
+    <mat-icon>history_toggle_off</mat-icon>
+    <p>No attendance records yet</p>
+  </div>
+
+  <div class="records-list" *ngIf="records.length > 0">
+    <div class="record-item" *ngFor="let r of records">
+      <div class="record-date-box">
+        <span class="rec-day">{{ getSessionDate(r) | date:'d' }}</span>
+        <span class="rec-month">{{ getSessionDate(r) | date:'MMM' }}</span>
+      </div>
+      <div class="record-info">
+        <p class="rec-session">{{ getSessionTitle(r) }}</p>
+        <p class="rec-times">
+          <mat-icon style="font-size:12px;width:12px;height:12px;vertical-align:middle;">login</mat-icon>
+          {{ (r.checkIn?.time | date:'h:mm a') || '--:--' }}
+          &nbsp;•&nbsp;
+          <mat-icon style="font-size:12px;width:12px;height:12px;vertical-align:middle;">logout</mat-icon>
+          {{ (r.checkOut?.time | date:'h:mm a') || '--:--' }}
+        </p>
+      </div>
+      <span class="rec-badge" [ngClass]="{
+        'badge-present': r.status === 'present',
+        'badge-late': r.status === 'late',
+        'badge-absent': r.status === 'absent'
+      }">{{ r.status }}</span>
+    </div>
+  </div>
+
+</div>

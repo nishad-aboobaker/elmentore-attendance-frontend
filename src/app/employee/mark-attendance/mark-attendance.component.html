@@ -1,0 +1,94 @@
+<div class="checkin-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Check In / Out</h1>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading session...</p>
+  </div>
+
+  <!-- No session -->
+  <div class="empty-state-page" *ngIf="!loading && !session">
+    <mat-icon>event_busy</mat-icon>
+    <h3>No Active Session</h3>
+    <p>There is no active session to check in to right now. Please wait for your administrator to start a session.</p>
+  </div>
+
+  <!-- Session found -->
+  <div *ngIf="!loading && session">
+
+    <!-- Session info card -->
+    <div class="session-info-card">
+      <div class="session-meta">
+        <div class="session-avatar">{{ session.title?.charAt(0) || 'S' }}</div>
+        <div>
+          <h2 class="session-name">{{ session.title }}</h2>
+          <p class="session-time-str">{{ session.date | date:'EEEE, MMM d' }} • {{ session.startTime }} – {{ session.endTime }}</p>
+        </div>
+      </div>
+      <div class="session-tags">
+        <span class="tag-blue" *ngIf="session.agenda">{{ session.agenda }}</span>
+        <span class="tag-gray" *ngIf="session.location?.name">
+          <mat-icon style="font-size:13px;width:13px;height:13px;vertical-align:middle;">place</mat-icon>
+          {{ session.location.name }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Location / error messages -->
+    <div class="alert-warn" *ngIf="locationError">
+      <mat-icon>warning_amber</mat-icon>
+      <span>{{ locationError }}</span>
+    </div>
+    <div class="alert-ok" *ngIf="latitude && longitude">
+      <mat-icon>check_circle</mat-icon>
+      <span>Location acquired: {{ latitude.toFixed(4) }}, {{ longitude.toFixed(4) }}</span>
+    </div>
+
+    <!-- Current status -->
+    <div class="current-status-card" *ngIf="record">
+      <div class="status-row">
+        <div class="status-item">
+          <mat-icon>login</mat-icon>
+          <span class="status-time-label">Check In</span>
+          <span class="status-time-val">{{ (record.checkIn?.time | date:'h:mm a') || '—' }}</span>
+        </div>
+        <div class="status-divider"></div>
+        <div class="status-item">
+          <mat-icon>logout</mat-icon>
+          <span class="status-time-label">Check Out</span>
+          <span class="status-time-val">{{ (record.checkOut?.time | date:'h:mm a') || '—' }}</span>
+        </div>
+      </div>
+      <div class="status-badge-row">
+        <span class="rec-badge" [ngClass]="{
+          'badge-present': record.status === 'present',
+          'badge-late': record.status === 'late',
+          'badge-half': record.status === 'half',
+          'badge-absent': record.status === 'absent'
+        }">{{ record.status === 'half' ? 'Half Day' : record.status }}</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-btns">
+      <button mat-raised-button color="primary" (click)="checkIn()"
+        [disabled]="!!record?.checkIn?.time"
+        class="action-btn-large">
+        <mat-icon>login</mat-icon>
+        Check In
+      </button>
+      <button mat-raised-button (click)="checkOut()"
+        [disabled]="!record?.checkIn?.time || record?.checkOut?.time"
+        class="action-btn-large outline-btn">
+        <mat-icon>logout</mat-icon>
+        Check Out
+      </button>
+    </div>
+
+  </div>
+</div>

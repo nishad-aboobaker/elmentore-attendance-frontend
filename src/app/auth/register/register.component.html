@@ -1,0 +1,80 @@
+<div class="login-page">
+  <div class="login-scrollable">
+
+    <!-- Logo -->
+    <div class="logo-block">
+      <div class="logo-icon-wrap">
+        <mat-icon>fingerprint</mat-icon>
+      </div>
+      <span class="logo-name">Elmentore</span>
+      <span class="logo-tagline">Enterprise Attendance Simplified</span>
+    </div>
+
+    <!-- Register Card — plain div avoids mat-card internal padding issues -->
+    <div class="login-card">
+      <p class="form-heading">Create Account</p>
+      <p class="form-subheading">Fill in the details to register as an employee</p>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+        <label class="field-label">Full Name</label>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput formControlName="name" placeholder="John Doe">
+          <mat-error *ngIf="registerForm.get('name')?.hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+
+        <label class="field-label">Email Address</label>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput type="email" formControlName="email" placeholder="name@company.com">
+          <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Invalid email address</mat-error>
+        </mat-form-field>
+
+        <label class="field-label">Department</label>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput formControlName="department" placeholder="e.g. Engineering">
+          <mat-error *ngIf="registerForm.get('department')?.hasError('required')">Department is required</mat-error>
+        </mat-form-field>
+
+        <label class="field-label">Password</label>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Min. 6 characters">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" tabindex="-1">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="registerForm.get('password')?.hasError('required')">Password is required</mat-error>
+          <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">Min. 6 characters</mat-error>
+        </mat-form-field>
+
+        <label class="field-label">Confirm Password</label>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Repeat password">
+          <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button" tabindex="-1">
+            <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Confirm password is required</mat-error>
+          <mat-error *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched">Passwords do not match</mat-error>
+        </mat-form-field>
+
+        <div *ngIf="error" class="error-msg">{{ error }}</div>
+        <div *ngIf="successMsg" class="success-msg">{{ successMsg }}</div>
+
+        <button mat-raised-button color="primary" type="submit"
+          [disabled]="registerForm.invalid || loading" class="submit-btn">
+          {{ loading ? 'Creating account...' : 'Create Account →' }}
+        </button>
+
+      </form>
+
+      <div class="signup-link">
+        Already have an account? <a routerLink="/login">Sign in</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="login-footer">
+    <div class="status-online"><span class="status-dot"></span>Server Status: Online</div>
+    <div>© 2024 Elmentore Protocol. All rights reserved.</div>
+  </div>
+</div>

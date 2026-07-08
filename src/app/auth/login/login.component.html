@@ -1,0 +1,60 @@
+<div class="login-page">
+  <div class="login-scrollable">
+
+    <!-- Logo Block -->
+    <div class="logo-block">
+      <div class="logo-icon-wrap">
+        <mat-icon>fingerprint</mat-icon>
+      </div>
+      <span class="logo-name">Elmentore</span>
+      <span class="logo-tagline">Enterprise Attendance Simplified</span>
+    </div>
+
+    <!-- Login Card — using plain div to avoid mat-card internal padding issues -->
+    <div class="login-card">
+      <p class="form-heading">Welcome back</p>
+      <p class="form-subheading">Please enter your credentials to continue</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <label class="field-label">Email Address</label>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput type="email" formControlName="email" placeholder="name@company.com">
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Invalid email</mat-error>
+        </mat-form-field>
+
+        <div class="pw-label-row">
+          <label class="field-label" style="margin-bottom:0">Password</label>
+          <a class="forgot-link">Forgot Password?</a>
+        </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="••••••••">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" tabindex="-1">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required</mat-error>
+        </mat-form-field>
+
+        <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+        <button mat-raised-button color="primary" type="submit"
+          [disabled]="loginForm.invalid || loading" class="submit-btn">
+          <span *ngIf="!loading">Login →</span>
+          <span *ngIf="loading">Signing in...</span>
+        </button>
+
+      </form>
+
+      <div class="signup-link">
+        Don't have an account? <a routerLink="/register">Register here</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="login-footer">
+    <div class="status-online"><span class="status-dot"></span>Server Status: Online</div>
+    <div>© 2024 Elmentore Protocol. All rights reserved.</div>
+  </div>
+</div>

@@ -1,0 +1,165 @@
+/* User Management — Reference Design */
+.admin-page {
+  background: var(--bg-app);
+  min-height: calc(100vh - 60px - 68px);
+  padding-bottom: 32px;
+  animation: fadeIn 0.3s ease;
+}
+
+.admin-page-header {
+  padding: 20px 20px 16px;
+}
+
+.admin-page-title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.admin-page-sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin: 0;
+}
+
+/* User List Cards */
+.user-list {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.15s ease;
+}
+.user-card:hover { box-shadow: var(--shadow-md); }
+
+.user-card-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.user-info { min-width: 0; flex: 1; }
+
+.user-name-text {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email-text {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin: 0 0 2px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-dept {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin: 0;
+  font-weight: 500;
+}
+
+.user-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.user-id-chip {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  letter-spacing: 0.04em;
+}
+
+.status-pill {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+}
+.active-pill { background: var(--success-light); color: var(--success-text); }
+.inactive-pill { background: var(--danger-light); color: var(--danger-text); }
+
+.toggle-btn {
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--r-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.activate-btn {
+  background: var(--primary);
+  color: #fff;
+}
+.activate-btn:hover { background: var(--primary-dark); }
+.deactivate-btn {
+  background: var(--absent-light);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.deactivate-btn:hover { background: var(--danger-light); color: var(--danger-text); }
+
+/* Empty state */
+.empty-page-state {
+  text-align: center;
+  padding: 56px 32px;
+  color: var(--text-muted);
+}
+.empty-page-state mat-icon {
+  font-size: 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  opacity: 0.25;
+  margin-bottom: 16px;
+}
+.empty-page-state h3 { font-size: 1.0625rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.empty-page-state p { font-size: 0.875rem; max-width: 260px; margin: 0 auto; line-height: 1.6; }

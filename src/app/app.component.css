@@ -1,0 +1,156 @@
+/* App Shell */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-app);
+}
+
+/* ---- HEADER TOOLBAR ---- */
+mat-toolbar {
+  background: var(--primary) !important;
+  color: #fff !important;
+  font-family: var(--font) !important;
+  font-weight: 700 !important;
+  height: 60px !important;
+  min-height: 60px !important;
+  padding: 0 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 2px 8px rgba(26, 95, 232, 0.18) !important;
+  border: none !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+}
+
+mat-toolbar .logo {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name {
+  font-size: 0.8125rem !important;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.15);
+  padding: 4px 12px;
+  border-radius: var(--r-full);
+}
+
+.logout-btn {
+  font-family: var(--font) !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+  color: #fff !important;
+  background: rgba(255,255,255,0.15) !important;
+  border: 1px solid rgba(255,255,255,0.3) !important;
+  border-radius: var(--r-md) !important;
+  height: 34px !important;
+  padding: 0 14px !important;
+  transition: background 0.2s ease !important;
+  cursor: pointer;
+}
+.logout-btn:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+
+/* ---- CONTENT AREA ---- */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 72px;
+  background: var(--bg-app);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.content::-webkit-scrollbar { display: none; }
+
+.content-guest {
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.content-guest::-webkit-scrollbar { display: none; }
+
+/* ---- BOTTOM NAVIGATION (Reference exact style) ---- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 68px;
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 200;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text-light);
+  width: 25%;
+  height: 100%;
+  gap: 3px;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.bottom-nav a mat-icon {
+  font-size: 22px !important;
+  width: 22px !important;
+  height: 22px !important;
+  transition: color 0.2s ease;
+}
+
+.bottom-nav a span {
+  font-family: var(--font);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.bottom-nav a:hover { color: var(--text-secondary); }
+
+.bottom-nav a.active {
+  color: var(--primary) !important;
+}
+
+/* Pill indicator on active tab like reference image */
+.bottom-nav a.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 var(--r-sm) var(--r-sm);
+}
+
+.bottom-nav a.active mat-icon { color: var(--primary) !important; }
+
+/* Mobile header scaling */
+@media (max-width: 600px) {
+  mat-toolbar { padding: 0 16px !important; height: 56px !important; min-height: 56px !important; }
+  mat-toolbar .logo { font-size: 1rem !important; }
+  .user-name { font-size: 0.75rem !important; padding: 3px 10px; }
+  .logout-btn { font-size: 0.75rem !important; height: 30px !important; }
+}

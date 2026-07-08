@@ -1,0 +1,44 @@
+<div class="admin-page">
+
+  <!-- Header -->
+  <div class="admin-page-header">
+    <div>
+      <h1 class="admin-page-title">User Management</h1>
+      <p class="admin-page-sub">Manage employee accounts and access</p>
+    </div>
+  </div>
+
+  <!-- User Cards List (mobile-friendly card layout vs. raw table) -->
+  <div class="user-list">
+    <div class="user-card" *ngFor="let u of users">
+      <div class="user-card-left">
+        <div class="user-avatar" [style.background]="u.isActive ? 'var(--primary)' : 'var(--absent)'">
+          {{ u.name?.charAt(0) | uppercase }}
+        </div>
+        <div class="user-info">
+          <p class="user-name-text">{{ u.name }}</p>
+          <p class="user-email-text">{{ u.email }}</p>
+          <p class="user-dept" *ngIf="u.department">{{ u.department }}</p>
+        </div>
+      </div>
+      <div class="user-card-right">
+        <div class="user-id-chip" *ngIf="u.employeeId">{{ u.employeeId }}</div>
+        <span class="status-pill" [class.active-pill]="u.isActive" [class.inactive-pill]="!u.isActive">
+          {{ u.isActive ? 'Active' : 'Inactive' }}
+        </span>
+        <button class="toggle-btn" [class.deactivate-btn]="u.isActive" [class.activate-btn]="!u.isActive"
+          (click)="toggleActive(u)">
+          {{ u.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-page-state" *ngIf="users.length === 0">
+      <mat-icon>group_off</mat-icon>
+      <h3>No users registered</h3>
+      <p>Employees who register will appear here for approval.</p>
+    </div>
+  </div>
+
+</div>

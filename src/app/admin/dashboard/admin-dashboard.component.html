@@ -1,0 +1,101 @@
+<div class="admin-dashboard">
+
+  <!-- Admin greeting header -->
+  <div class="admin-header">
+    <div>
+      <h1 class="admin-title">Admin Dashboard</h1>
+      <p class="admin-subtitle">Here is your daily attendance summary.</p>
+    </div>
+    <button class="notif-btn" mat-icon-button>
+      <mat-icon>notifications</mat-icon>
+    </button>
+  </div>
+
+  <!-- Daily Attendance (reference: gauge + participation %) -->
+  <div class="daily-card">
+    <div class="daily-left">
+      <p class="daily-label">DAILY ATTENDANCE</p>
+      <p class="daily-percent">{{ participationPercent }}%</p>
+      <p class="daily-sub">Participation</p>
+    </div>
+    <div class="gauge-wrap">
+      <svg viewBox="0 0 100 100" class="gauge-svg">
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#1a5fe8" stroke-width="10"
+                stroke-dasharray="264" [attr.stroke-dashoffset]="264 - (264 * participationPercent / 100)"
+                stroke-linecap="round" transform="rotate(-90 50 50)"/>
+        <text x="50" y="54" text-anchor="middle" font-size="18" font-weight="800" fill="#1a5fe8">{{ participationPercent }}%</text>
+      </svg>
+      <div class="gauge-icon">
+        <mat-icon>people</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- Present / Absent / Late chips row (reference exact layout) -->
+  <div class="stats-row">
+    <div class="stat-pill present-pill">
+      <div class="pill-header">
+        <mat-icon>check_circle</mat-icon>
+        <span class="pill-label">PRESENT</span>
+      </div>
+      <span class="pill-number">{{ stats.present }}</span>
+    </div>
+    <div class="stat-pill absent-pill">
+      <div class="pill-header">
+        <mat-icon>cancel</mat-icon>
+        <span class="pill-label">ABSENT</span>
+      </div>
+      <span class="pill-number">{{ stats.absent }}</span>
+    </div>
+  </div>
+
+  <div class="stats-row single">
+    <div class="stat-pill late-pill">
+      <div class="pill-header">
+        <mat-icon>schedule</mat-icon>
+        <span class="pill-label">TOTAL SESSIONS</span>
+      </div>
+      <span class="pill-number">{{ stats.totalSessions }}</span>
+    </div>
+  </div>
+
+  <!-- Pending Approvals section -->
+  <div class="section-card">
+    <div class="section-row">
+      <span class="section-title">Session Overview</span>
+      <a class="view-all" routerLink="/admin/sessions">View All</a>
+    </div>
+
+    <div *ngIf="sessions.length === 0" class="empty-state">
+      <mat-icon>event_available</mat-icon>
+      <p>No sessions yet</p>
+    </div>
+
+    <div class="session-approvals" *ngIf="sessions.length > 0">
+      <div class="approval-row" *ngFor="let s of sessions.slice(0, 3)">
+        <div class="approval-avatar">{{ s.title?.charAt(0) || 'S' }}</div>
+        <div class="approval-info">
+          <p class="approval-name">{{ s.title }}</p>
+          <p class="approval-sub">{{ s.date | date:'MMM d' }} • {{ s.startTime }} – {{ s.endTime }}</p>
+        </div>
+        <span class="status-chip" [ngClass]="{
+          'chip-active': s.status === 'active',
+          'chip-upcoming': s.status === 'upcoming',
+          'chip-done': s.status === 'completed'
+        }">{{ s.status }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Action Buttons -->
+  <div class="quick-actions">
+    <button mat-raised-button color="primary" routerLink="/admin/sessions" class="action-full-btn">
+      <mat-icon>event_note</mat-icon> Manage Sessions
+    </button>
+    <button mat-raised-button color="primary" routerLink="/admin/users" class="action-full-btn outline">
+      <mat-icon>group</mat-icon> Manage Users
+    </button>
+  </div>
+
+</div>

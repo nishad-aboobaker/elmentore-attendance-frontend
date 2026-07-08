@@ -1,0 +1,122 @@
+<div class="sessions-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Sessions</h1>
+      <p class="page-sub">Manage working day sessions</p>
+    </div>
+    <button class="create-btn" (click)="openCreate()">
+      <mat-icon>add</mat-icon> New
+    </button>
+  </div>
+
+  <!-- Create / Edit Form -->
+  <div *ngIf="showForm" class="form-card">
+    <div class="form-card-header">
+      <span>{{ editingSession ? 'Edit Session' : 'New Session' }}</span>
+      <button mat-icon-button (click)="cancelForm()"><mat-icon>close</mat-icon></button>
+    </div>
+    <form [formGroup]="sessionForm" (ngSubmit)="onSubmit()" class="session-form">
+
+      <label class="field-label">Session Title</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <input matInput formControlName="title" placeholder="e.g. Morning Attendance">
+        <mat-error *ngIf="sessionForm.get('title')?.hasError('required')">Title is required</mat-error>
+      </mat-form-field>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label class="field-label">Date</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput type="date" formControlName="date">
+          </mat-form-field>
+        </div>
+        <div class="form-col">
+          <label class="field-label">Start Time</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput type="time" formControlName="startTime">
+          </mat-form-field>
+        </div>
+        <div class="form-col">
+          <label class="field-label">End Time</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput type="time" formControlName="endTime">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <label class="field-label">Agenda (Optional)</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <textarea matInput formControlName="agenda" rows="2" placeholder="Session agenda or description"></textarea>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-button type="button" (click)="cancelForm()" class="cancel-btn">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="sessionForm.invalid" class="save-btn">
+          {{ editingSession ? 'Update Session' : 'Create Session' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Sessions List -->
+  <div class="sessions-list">
+    <div *ngIf="sessions.length === 0" class="empty-page-state">
+      <mat-icon>event_note</mat-icon>
+      <h3>No sessions yet</h3>
+      <p>Tap "New" to create your first session.</p>
+    </div>
+
+    <div class="session-card" *ngFor="let s of sessions">
+      <!-- Left: date badge -->
+      <div class="sess-date-badge">
+        <span class="sess-day">{{ s.date | date:'d' }}</span>
+        <span class="sess-month">{{ s.date | date:'MMM' }}</span>
+      </div>
+
+      <!-- Middle: info -->
+      <div class="sess-info">
+        <p class="sess-title">{{ s.title }}</p>
+        <p class="sess-time">
+          <mat-icon style="font-size:13px;width:13px;height:13px;vertical-align:middle;">schedule</mat-icon>
+          {{ s.startTime }} – {{ s.endTime }}
+        </p>
+        <p class="sess-agenda" *ngIf="s.agenda">{{ s.agenda }}</p>
+      </div>
+
+      <!-- Right: status + actions -->
+      <div class="sess-right">
+        <span class="status-chip"
+          [class.chip-upcoming]="s.status === 'upcoming'"
+          [class.chip-active]="s.status === 'active'"
+          [class.chip-done]="s.status === 'completed'"
+          [class.chip-cancelled]="s.status === 'cancelled'">
+          {{ s.status }}
+        </span>
+        <div class="sess-actions">
+          <!-- Activate: only for upcoming -->
+          <button class="act-btn activate-btn" *ngIf="s.status === 'upcoming'"
+            (click)="activateSession(s._id)" title="Activate session">
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+          <!-- Complete: only for active -->
+          <button class="act-btn complete-btn" *ngIf="s.status === 'active'"
+            (click)="completeSession(s._id)" title="Mark complete">
+            <mat-icon>check</mat-icon>
+          </button>
+          <!-- Edit -->
+          <button class="act-btn edit-btn" (click)="openEdit(s)" title="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <!-- Cancel -->
+          <button class="act-btn cancel-btn" *ngIf="s.status !== 'cancelled' && s.status !== 'completed'"
+            (click)="cancelSession(s._id)" title="Cancel">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

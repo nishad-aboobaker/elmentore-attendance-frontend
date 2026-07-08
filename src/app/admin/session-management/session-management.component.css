@@ -1,0 +1,263 @@
+/* Session Management — Reference Design */
+.sessions-page {
+  background: var(--bg-app);
+  min-height: calc(100vh - 60px - 68px);
+  padding-bottom: 32px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ---- Page Header ---- */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 16px 16px;
+}
+
+.page-title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+
+.page-sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin: 0;
+}
+
+.create-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  padding: 8px 16px;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  box-shadow: 0 2px 8px rgba(26,95,232,0.22);
+}
+.create-btn:hover { background: var(--primary-dark); }
+.create-btn mat-icon { font-size: 18px !important; width: 18px !important; height: 18px !important; }
+
+/* ---- Create / Edit Form Card ---- */
+.form-card {
+  margin: 0 16px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+}
+
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.session-form { display: block; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.form-col { display: flex; flex-direction: column; }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.cancel-btn {
+  font-family: var(--font) !important;
+  font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+}
+
+.save-btn {
+  border-radius: var(--r-md) !important;
+  font-weight: 700 !important;
+  font-family: var(--font) !important;
+}
+
+/* ---- Sessions List ---- */
+.sessions-list {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.session-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.15s ease;
+}
+.session-card:hover { box-shadow: var(--shadow-md); }
+
+/* Date Badge */
+.sess-date-badge {
+  width: 44px;
+  height: 50px;
+  background: var(--primary-light);
+  border-radius: var(--r-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sess-day {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.sess-month {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Info */
+.sess-info { flex: 1; min-width: 0; }
+
+.sess-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sess-time {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin: 0 0 2px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.sess-agenda {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin: 0;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right: Status + Actions */
+.sess-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Status chip */
+.status-chip {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+}
+.chip-upcoming { background: var(--primary-light); color: var(--primary); }
+.chip-active { background: var(--success-light); color: var(--success-text); }
+.chip-done { background: var(--absent-light); color: var(--text-muted); }
+.chip-cancelled { background: var(--danger-light); color: var(--danger-text); }
+
+/* Action icon buttons */
+.sess-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.act-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-sm);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.act-btn mat-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.activate-btn { background: var(--success-light); color: var(--success-text); }
+.activate-btn:hover { background: var(--success); color: #fff; }
+
+.complete-btn { background: var(--primary-light); color: var(--primary); }
+.complete-btn:hover { background: var(--primary); color: #fff; }
+
+.edit-btn { background: var(--absent-light); color: var(--text-secondary); }
+.edit-btn:hover { background: #e2e8f0; }
+
+.cancel-btn { background: var(--danger-light); color: var(--danger-text); }
+.cancel-btn:hover { background: var(--danger); color: #fff; }
+
+/* Empty state */
+.empty-page-state {
+  text-align: center;
+  padding: 56px 32px;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-card);
+}
+.empty-page-state mat-icon {
+  font-size: 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  opacity: 0.25;
+  margin-bottom: 16px;
+}
+.empty-page-state h3 { font-size: 1.0625rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+.empty-page-state p { font-size: 0.875rem; margin: 0; }
+
+/* Mobile: stack form row */
+@media (max-width: 480px) {
+  .form-row { grid-template-columns: 1fr; }
+}
