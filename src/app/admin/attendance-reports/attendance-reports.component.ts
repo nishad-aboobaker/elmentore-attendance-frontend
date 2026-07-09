@@ -29,6 +29,10 @@ export class AttendanceReportsComponent implements OnInit {
   userDisplayedColumns = ['date', 'title', 'checkIn', 'checkOut'];
   userMetrics = { total: 0, present: 0, late: 0, half: 0, absent: 0, cancelled: 0 };
 
+  // Tab 3: Master Report
+  masterTimeframe = 'month';
+  isExporting = false;
+
   // Edit Modal State
   editingRecord: any = null;
   editStatus = 'absent';
@@ -200,5 +204,113 @@ export class AttendanceReportsComponent implements OnInit {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "User Attendance");
     XLSX.writeFile(wb, `attendance-${empName}-${this.selectedTimeframe}.xlsx`);
+  }
+
+  exportMasterExcel(): void {
+    this.isExporting = true;
+    this.attendanceService.getAllAttendance().subscribe({
+      next: (allRecords) => {
+        const now = new Date();
+        let validSessions = this.sessions.filter(s => new Date(s.date) <= now);
+        
+        if (this.masterTimeframe === 'month') {
+           validSessions = validSessions.filter(s => new Date(s.date).getMonth() === now.getMonth() && new Date(s.date).getFullYear() === now.getFullYear());
+        } else if (this.masterTimeframe === 'year') {
+           validSessions = validSessions.filter(s => new Date(s.date).getFullYear() === now.getFullYear());
+        }
+
+        // Sheet 1: Employee Summary
+        const employeeSummaryData = this.employees.map(emp => {
+          let total = validSessions.length;
+          let present = 0, late = 0, half = 0, absent = 0, cancelled = 0;
+          
+          validSessions.forEach(session => {
+            const record = allRecords.find(r => {
+              const rSid = typeof r.sessionId === 'object' ? (r.sessionId as any)._id : r.sessionId;
+              const rUid = typeof r.userId === 'object' ? (r.userId as any)._id : r.userId;
+              return rSid === session._id && rUid === emp._id;
+            });
+            const status = session.status === 'cancelled' ? 'cancelled' : (record ? record.status : 'absent');
+            
+            if (status === 'present') present++;
+            else if (status === 'late') late++;
+            else if (status === 'half') half++;
+            else if (status === 'absent') absent++;
+            else if (status === 'cancelled') cancelled++;
+          });
+
+          return {
+            'Employee Name': emp.name,
+            'Email': emp.email,
+            'Total Scheduled': total,
+            'Present': present,
+            'Late': late,
+            'Half Day': half,
+            'Absent': absent,
+            'Cancelled': cancelled
+          };
+        });
+
+        // Sheet 2: Session Summary
+        const sessionSummaryData = validSessions.map(session => {
+          let present = 0, late = 0, half = 0, absent = 0;
+          this.employees.forEach(emp => {
+            const record = allRecords.find(r => {
+              const rSid = typeof r.sessionId === 'object' ? (r.sessionId as any)._id : r.sessionId;
+              const rUid = typeof r.userId === 'object' ? (r.userId as any)._id : r.userId;
+              return rSid === session._id && rUid === emp._id;
+            });
+            const status = session.status === 'cancelled' ? 'cancelled' : (record ? record.status : 'absent');
+            if (status === 'present') present++;
+            else if (status === 'late') late++;
+            else if (status === 'half') half++;
+            else if (status === 'absent') absent++;
+          });
+          
+          return {
+            'Session Title': session.title,
+            'Date': new Date(session.date).toLocaleDateString(),
+            'Status': session.status === 'cancelled' ? 'Cancelled' : 'Completed',
+            'Present': present,
+            'Late': late,
+            'Half Day': half,
+            'Absent': absent
+          };
+        });
+
+        // Sheet 3: Detailed Log
+        const detailedLogData: any[] = [];
+        validSessions.forEach(session => {
+           this.employees.forEach(emp => {
+              const record = allRecords.find(r => {
+                const rSid = typeof r.sessionId === 'object' ? (r.sessionId as any)._id : r.sessionId;
+                const rUid = typeof r.userId === 'object' ? (r.userId as any)._id : r.userId;
+                return rSid === session._id && rUid === emp._id;
+              });
+              const status = session.status === 'cancelled' ? 'cancelled' : (record ? record.status : 'absent');
+              detailedLogData.push({
+                 'Date': new Date(session.date).toLocaleDateString(),
+                 'Session': session.title,
+                 'Employee Name': emp.name,
+                 'Check In': record?.checkIn?.time ? new Date(record.checkIn.time).toLocaleTimeString() : '',
+                 'Check Out': record?.checkOut?.time ? new Date(record.checkOut.time).toLocaleTimeString() : '',
+                 'Status': (status || '').toUpperCase()
+              });
+           });
+        });
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(employeeSummaryData), "Employee Summary");
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sessionSummaryData), "Session Summary");
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(detailedLogData), "Detailed Log");
+        
+        XLSX.writeFile(wb, `master-attendance-${this.masterTimeframe}.xlsx`);
+        this.isExporting = false;
+      },
+      error: () => {
+        this.snackBar.open('Error exporting master report', 'Close', { duration: 3000 });
+        this.isExporting = false;
+      }
+    });
   }
 }

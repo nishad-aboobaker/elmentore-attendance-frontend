@@ -144,6 +144,36 @@
         </div>
       </div>
     </mat-tab>
+
+    <!-- Tab 3: Master Report -->
+    <mat-tab label="Master Report">
+      <div class="tab-content" style="padding-top: 16px;">
+        <div class="controls">
+          <mat-form-field appearance="outline">
+            <mat-label>Timeframe</mat-label>
+            <mat-select [(value)]="masterTimeframe">
+              <mat-option value="overall">Overall</mat-option>
+              <mat-option value="month">This Month</mat-option>
+              <mat-option value="year">This Year</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button class="export-btn" (click)="exportMasterExcel()" [disabled]="isExporting">
+            {{ isExporting ? 'Exporting...' : 'Export Master Excel' }}
+          </button>
+        </div>
+
+        <div class="metrics-grid" style="margin-top: 32px; text-align: center;">
+          <div class="metric-card" style="grid-column: span 4; background: var(--primary-light); padding: 32px;">
+             <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: var(--primary);">table_chart</mat-icon>
+             <h2 style="margin-top: 16px;">Comprehensive Master Export</h2>
+             <p style="color: var(--text-muted); max-width: 400px; margin: 0 auto;">
+               Download a complete Excel workbook containing 3 sheets: Employee Summary, Session Summary, and a Detailed Log of all check-ins for the selected timeframe.
+             </p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </div>
 

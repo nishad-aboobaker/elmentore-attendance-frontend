@@ -31,6 +31,10 @@ export class AttendanceService {
     return this.http.get<Attendance[]>(`${this.apiUrl}/user/${userId}`);
   }
 
+  getAllAttendance(): Observable<Attendance[]> {
+    return this.http.get<Attendance[]>(`${this.apiUrl}/all`);
+  }
+
   manualUpsert(data: { sessionId: string; userId: string; status: string; checkIn?: any; checkOut?: any }): Observable<Attendance> {
     return this.http.post<Attendance>(`${this.apiUrl}/manual`, data);
   }
