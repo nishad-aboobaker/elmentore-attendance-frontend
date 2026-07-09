@@ -1,59 +1,150 @@
 <div class="page">
   <h1>Attendance Reports</h1>
   
-  <div class="controls">
-    <mat-form-field appearance="outline">
-      <mat-label>Select Session</mat-label>
-      <mat-select [(value)]="selectedSessionId" (selectionChange)="loadAttendance()">
-        <mat-option *ngFor="let s of sessions" [value]="s._id">
-          {{ s.title }} ({{ s.date | date }})
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button class="export-btn" (click)="exportCSV()" [disabled]="attendanceRecords.length === 0">
-      Export CSV
-    </button>
-  </div>
-
-  <div class="table-wrapper">
-    <table mat-table [dataSource]="attendanceRecords" class="full-width">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let r">
-          <strong>{{ r.userId?.name || '-' }}</strong>
-        </td>
-      </ng-container>
-      
-      <ng-container matColumnDef="checkIn">
-        <th mat-header-cell *matHeaderCellDef>Check In</th>
-        <td mat-cell *matCellDef="let r">{{ (r.checkIn?.time | date:'shortTime') || '-' }}</td>
-      </ng-container>
-      
-      <ng-container matColumnDef="checkOut">
-        <th mat-header-cell *matHeaderCellDef>Check Out</th>
-        <td mat-cell *matCellDef="let r">{{ (r.checkOut?.time | date:'shortTime') || '-' }}</td>
-      </ng-container>
-      
-      <!-- Removed Status Column -->      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let r" style="text-align: right;">
-          <button mat-icon-button color="primary" (click)="openEdit(r)">
-            <mat-icon>edit</mat-icon>
+  <mat-tab-group animationDuration="0ms">
+    <!-- Tab 1: By Session -->
+    <mat-tab label="By Session">
+      <div class="tab-content" style="padding-top: 16px;">
+        <div class="controls">
+          <mat-form-field appearance="outline">
+            <mat-label>Select Session</mat-label>
+            <mat-select [(value)]="selectedSessionId" (selectionChange)="loadAttendance()">
+              <mat-option *ngFor="let s of sessions" [value]="s._id">
+                {{ s.title }} ({{ s.date | date }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button class="export-btn" (click)="exportSessionExcel()" [disabled]="attendanceRecords.length === 0">
+            Export Excel
           </button>
-        </td>
-      </ng-container>
+        </div>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="'row-status-' + row.status"></tr>
-      
-      <!-- Empty Data Row -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" [attr.colspan]="displayedColumns.length" style="text-align: center; padding: 32px; color: var(--text-muted);">
-          No attendance records found for this session.
-        </td>
-      </tr>
-    </table>
-  </div>
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="attendanceRecords" class="full-width">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let r">
+                <strong>{{ r.userId?.name || '-' }}</strong>
+              </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="checkIn">
+              <th mat-header-cell *matHeaderCellDef>Check In</th>
+              <td mat-cell *matCellDef="let r">{{ (r.checkIn?.time | date:'shortTime') || '-' }}</td>
+            </ng-container>
+            
+            <ng-container matColumnDef="checkOut">
+              <th mat-header-cell *matHeaderCellDef>Check Out</th>
+              <td mat-cell *matCellDef="let r">{{ (r.checkOut?.time | date:'shortTime') || '-' }}</td>
+            </ng-container>
+            
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let r" style="text-align: right;">
+                <button mat-icon-button color="primary" (click)="openEdit(r)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="'row-status-' + row.status"></tr>
+            
+            <!-- Empty Data Row -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" [attr.colspan]="displayedColumns.length" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                No attendance records found for this session.
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Tab 2: By Employee -->
+    <mat-tab label="By Employee">
+      <div class="tab-content" style="padding-top: 16px;">
+        <div class="controls">
+          <mat-form-field appearance="outline">
+            <mat-label>Select Employee</mat-label>
+            <mat-select [(value)]="selectedEmployeeId" (selectionChange)="loadUserAttendance()">
+              <mat-option *ngFor="let e of employees" [value]="e._id">
+                {{ e.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Timeframe</mat-label>
+            <mat-select [(value)]="selectedTimeframe" (selectionChange)="loadUserAttendance()">
+              <mat-option value="overall">Overall</mat-option>
+              <mat-option value="month">This Month</mat-option>
+              <mat-option value="year">This Year</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button class="export-btn" (click)="exportUserExcel()" [disabled]="userAttendanceRecords.length === 0">
+            Export Excel
+          </button>
+        </div>
+
+        <!-- Metrics Dashboard -->
+        <div class="metrics-grid" *ngIf="selectedEmployeeId">
+          <div class="metric-card total">
+             <div class="metric-value">{{ userMetrics.total }}</div>
+             <div class="metric-label">Sessions</div>
+          </div>
+          <div class="metric-card present">
+             <div class="metric-value">{{ userMetrics.present }}</div>
+             <div class="metric-label">Present</div>
+          </div>
+          <div class="metric-card late">
+             <div class="metric-value">{{ userMetrics.late }}</div>
+             <div class="metric-label">Late</div>
+          </div>
+          <div class="metric-card absent">
+             <div class="metric-value">{{ userMetrics.absent }}</div>
+             <div class="metric-label">Absent</div>
+          </div>
+        </div>
+
+        <div class="table-wrapper" *ngIf="selectedEmployeeId">
+          <table mat-table [dataSource]="userAttendanceRecords" class="full-width">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let r">
+                <strong>{{ (r.sessionId?.date | date:'MMM d, yyyy') || '-' }}</strong>
+              </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef>Session</th>
+              <td mat-cell *matCellDef="let r">{{ r.sessionId?.title || '-' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="checkIn">
+              <th mat-header-cell *matHeaderCellDef>Check In</th>
+              <td mat-cell *matCellDef="let r">{{ (r.checkIn?.time | date:'shortTime') || '-' }}</td>
+            </ng-container>
+            
+            <ng-container matColumnDef="checkOut">
+              <th mat-header-cell *matHeaderCellDef>Check Out</th>
+              <td mat-cell *matCellDef="let r">{{ (r.checkOut?.time | date:'shortTime') || '-' }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="userDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: userDisplayedColumns;" [ngClass]="'row-status-' + row.status"></tr>
+            
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" [attr.colspan]="userDisplayedColumns.length" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                No attendance records found for this timeframe.
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 
 <!-- Edit Overlay -->
