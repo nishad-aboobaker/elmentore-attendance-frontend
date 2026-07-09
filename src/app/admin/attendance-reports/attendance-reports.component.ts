@@ -17,7 +17,7 @@ export class AttendanceReportsComponent implements OnInit {
   employees: User[] = [];
   selectedSessionId = '';
   attendanceRecords: Attendance[] = [];
-  displayedColumns = ['name', 'checkIn', 'checkOut', 'status', 'actions'];
+  displayedColumns = ['name', 'checkIn', 'checkOut', 'actions'];
 
   // Edit Modal State
   editingRecord: any = null;

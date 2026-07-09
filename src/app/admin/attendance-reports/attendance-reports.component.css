@@ -52,7 +52,6 @@ h1 {
 
 table {
   width: 100%;
-  min-width: 550px; /* Forces horizontal scrolling on mobile instead of squishing columns */
   display: table !important; /* Overrides mat-table's default display: block */
   table-layout: fixed; /* Forces columns to distribute evenly */
   white-space: nowrap; 
@@ -84,27 +83,24 @@ tr.mat-row:last-child td.mat-cell {
 }
 
 /* Force mat-table columns to distribute nicely */
-.mat-column-name { width: 25%; }
-.mat-column-checkIn { width: 25%; }
-.mat-column-checkOut { width: 25%; }
-.mat-column-status { width: 15%; }
-.mat-column-actions { width: 60px; min-width: 60px; padding-right: 8px !important; }
+.mat-column-name { width: 33%; }
+.mat-column-checkIn { width: 33%; }
+.mat-column-checkOut { width: 34%; }
+.mat-column-actions { width: 50px; min-width: 50px; padding-right: 0 !important; }
 
-/* Status Chips */
-.status-chip {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 4px 10px;
-  border-radius: var(--r-full);
-  display: inline-block;
+/* Row Status Colors */
+tr.row-status-present {
+  background-color: var(--success-light);
 }
-.status-present { background: var(--success-light); color: var(--success-text); }
-.status-late { background: var(--warning-light, #fef08a); color: var(--warning-text, #854d0e); }
-.status-half { background: #ffedd5; color: #c2410c; } /* Orange warning style */
-.status-warn { background: var(--danger-light); color: var(--danger-text); }
-.status-absent { background: var(--danger-light); color: var(--danger-text); }
+tr.row-status-late {
+  background-color: var(--warning-light, #fef08a);
+}
+tr.row-status-half {
+  background-color: #ffedd5;
+}
+tr.row-status-absent, tr.row-status-cancelled {
+  background-color: var(--danger-light);
+}
 
 /* Edit Modal */
 .edit-overlay {
