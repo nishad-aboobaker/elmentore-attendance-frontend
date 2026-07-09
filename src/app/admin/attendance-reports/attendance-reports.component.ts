@@ -226,8 +226,8 @@ export class AttendanceReportsComponent implements OnInit {
           
           validSessions.forEach(session => {
             const record = allRecords.find(r => {
-              const rSid = typeof r.sessionId === 'object' ? (r.sessionId as any)._id : r.sessionId;
-              const rUid = typeof r.userId === 'object' ? (r.userId as any)._id : r.userId;
+              const rSid = (r.sessionId && typeof r.sessionId === 'object') ? (r.sessionId as any)._id : r.sessionId;
+              const rUid = (r.userId && typeof r.userId === 'object') ? (r.userId as any)._id : r.userId;
               return rSid === session._id && rUid === emp._id;
             });
             const status = session.status === 'cancelled' ? 'cancelled' : (record ? record.status : 'absent');
@@ -256,8 +256,8 @@ export class AttendanceReportsComponent implements OnInit {
           let present = 0, late = 0, half = 0, absent = 0;
           this.employees.forEach(emp => {
             const record = allRecords.find(r => {
-              const rSid = typeof r.sessionId === 'object' ? (r.sessionId as any)._id : r.sessionId;
-              const rUid = typeof r.userId === 'object' ? (r.userId as any)._id : r.userId;
+              const rSid = (r.sessionId && typeof r.sessionId === 'object') ? (r.sessionId as any)._id : r.sessionId;
+              const rUid = (r.userId && typeof r.userId === 'object') ? (r.userId as any)._id : r.userId;
               return rSid === session._id && rUid === emp._id;
             });
             const status = session.status === 'cancelled' ? 'cancelled' : (record ? record.status : 'absent');
@@ -283,8 +283,8 @@ export class AttendanceReportsComponent implements OnInit {
         validSessions.forEach(session => {
            this.employees.forEach(emp => {
               const record = allRecords.find(r => {
-                const rSid = typeof r.sessionId === 'object' ? (r.sessionId as any)._id : r.sessionId;
-                const rUid = typeof r.userId === 'object' ? (r.userId as any)._id : r.userId;
+                const rSid = (r.sessionId && typeof r.sessionId === 'object') ? (r.sessionId as any)._id : r.sessionId;
+                const rUid = (r.userId && typeof r.userId === 'object') ? (r.userId as any)._id : r.userId;
                 return rSid === session._id && rUid === emp._id;
               });
               const status = session.status === 'cancelled' ? 'cancelled' : (record ? record.status : 'absent');

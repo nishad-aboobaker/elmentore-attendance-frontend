@@ -19,7 +19,9 @@ export class UserManagementComponent implements OnInit {
   }
 
   loadUsers(): void {
-    this.userService.getAll().subscribe((u) => this.users = u);
+    this.userService.getAll().subscribe((u) => {
+      this.users = u.filter(user => user.role !== 'admin');
+    });
   }
 
   toggleActive(user: User): void {
