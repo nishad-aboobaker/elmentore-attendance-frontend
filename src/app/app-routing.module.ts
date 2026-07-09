@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 import { RoleGuard } from './auth/role.guard';
+import { GuestGuard } from './auth/guest.guard';
 
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -14,8 +15,8 @@ import { MarkAttendanceComponent } from './employee/mark-attendance/mark-attenda
 import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [GuestGuard] },
   {
     path: 'admin',
     canActivate: [AuthGuard, RoleGuard],

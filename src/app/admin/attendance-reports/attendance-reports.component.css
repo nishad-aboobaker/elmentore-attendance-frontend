@@ -52,6 +52,7 @@ h1 {
 
 table {
   width: 100%;
+  min-width: 550px; /* Forces horizontal scrolling on mobile instead of squishing columns */
   display: table !important; /* Overrides mat-table's default display: block */
   table-layout: fixed; /* Forces columns to distribute evenly */
   white-space: nowrap; 
