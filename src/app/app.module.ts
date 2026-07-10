@@ -39,6 +39,7 @@ import { EmployeeDashboardComponent } from './employee/dashboard/employee-dashbo
 import { MarkAttendanceComponent } from './employee/mark-attendance/mark-attendance.component';
 import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.component';
 import { SessionDetailsDialogComponent } from './employee/dashboard/session-details-dialog.component';
+import { TimeFormatPipe } from './shared/pipes/time-format.pipe';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { SessionDetailsDialogComponent } from './employee/dashboard/session-deta
     EmployeeDashboardComponent,
     MarkAttendanceComponent,
     MyAttendanceComponent,
-    SessionDetailsDialogComponent
+    SessionDetailsDialogComponent,
+    TimeFormatPipe
   ],
   imports: [
     BrowserModule,

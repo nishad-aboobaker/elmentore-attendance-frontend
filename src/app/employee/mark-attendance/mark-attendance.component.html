@@ -27,7 +27,7 @@
         <div class="session-avatar">{{ session.title?.charAt(0) || 'S' }}</div>
         <div>
           <h2 class="session-name">{{ session.title }}</h2>
-          <p class="session-time-str">{{ session.date | date:'EEEE, MMM d' }} • {{ session.startTime }} – {{ session.endTime }}</p>
+          <p class="session-time-str">{{ session.date | date:'EEEE, MMM d' }} • {{ session.startTime | timeFormat }} - {{ session.endTime | timeFormat }}</p>
         </div>
       </div>
       <div class="session-tags">

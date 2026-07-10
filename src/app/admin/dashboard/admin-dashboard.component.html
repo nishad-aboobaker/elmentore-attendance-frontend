@@ -77,7 +77,7 @@
         <div class="approval-avatar">{{ s.title?.charAt(0) || 'S' }}</div>
         <div class="approval-info">
           <p class="approval-name">{{ s.title }}</p>
-          <p class="approval-sub">{{ s.date | date:'MMM d' }} • {{ s.startTime }} – {{ s.endTime }}</p>
+          <p class="approval-sub">{{ s.date | date:'MMM d' }} &bull; {{ s.startTime | timeFormat }} - {{ s.endTime | timeFormat }}</p>
         </div>
         <span class="status-chip" [ngClass]="{
           'chip-active': s.status === 'active',

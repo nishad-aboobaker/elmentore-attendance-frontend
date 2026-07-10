@@ -21,7 +21,7 @@
     <mat-icon>schedule</mat-icon>
     <div class="detail-text">
       <strong>Time</strong>
-      <p>{{ session.startTime }} – {{ session.endTime }}</p>
+      <p>{{ session.startTime | timeFormat }} – {{ session.endTime | timeFormat }}</p>
     </div>
   </div>
 

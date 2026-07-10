@@ -64,7 +64,7 @@
           <p class="session-item-title">{{ s.title }}</p>
           <p class="session-item-time">
             <mat-icon style="font-size:13px;width:13px;height:13px;vertical-align:middle;">schedule</mat-icon>
-            {{ s.startTime }} – {{ s.endTime }}
+            {{ s.startTime | timeFormat }} – {{ s.endTime | timeFormat }}
           </p>
         </div>
         <span class="badge badge-upcoming">Upcoming</span>
