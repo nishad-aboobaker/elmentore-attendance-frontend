@@ -28,6 +28,9 @@ export class AdminDashboardComponent implements OnInit {
   announcementTitle = '';
   announcementBody = '';
 
+  notifications: any[] = [];
+  unreadCount = 0;
+
   constructor(
     private sessionService: SessionService,
     private attendanceService: AttendanceService,
@@ -37,6 +40,8 @@ export class AdminDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.fetchNotifications();
+    
     // 1. Fetch sessions
     this.sessionService.getAll().subscribe((sessions) => {
       this.sessions = sessions;
@@ -97,5 +102,27 @@ export class AdminDashboardComponent implements OnInit {
           this.snackBar.open('Failed to send announcement.', 'Close', { duration: 3000 });
         }
       });
+  }
+
+  fetchNotifications(): void {
+    this.notificationService.getHistory().subscribe({
+      next: (res) => {
+        this.notifications = res;
+        this.unreadCount = this.notifications.filter(n => !n.isRead).length;
+      },
+      error: (err) => console.error('Failed to fetch notifications', err)
+    });
+  }
+
+  markAsRead(id: string): void {
+    this.notificationService.markAsRead(id).subscribe(() => {
+      this.fetchNotifications();
+    });
+  }
+
+  markAllAsRead(): void {
+    this.notificationService.markAsRead('all').subscribe(() => {
+      this.fetchNotifications();
+    });
   }
 }

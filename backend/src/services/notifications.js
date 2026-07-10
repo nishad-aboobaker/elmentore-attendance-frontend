@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const WorkingDay = require('../models/WorkingDay');
 const User = require('../models/User');
+const Notification = require('../models/Notification');
 const webpush = require('web-push');
 
 const scheduleNotifications = () => {
@@ -41,9 +42,18 @@ const scheduleNotifications = () => {
         });
 
         const sendPromises = [];
+        const notificationDocs = [];
         let count = 0;
         
         users.forEach(user => {
+          notificationDocs.push({
+            userId: user._id,
+            title: 'Upcoming Session Reminder',
+            message: `Session '${session.title}' starts in 10 minutes. Get ready!`,
+            type: 'reminder',
+            isRead: false
+          });
+
           user.pushSubscriptions.forEach(sub => {
             sendPromises.push(
               webpush.sendNotification(sub, payload).catch(err => {
@@ -55,6 +65,10 @@ const scheduleNotifications = () => {
         });
 
         await Promise.allSettled(sendPromises);
+        if (notificationDocs.length > 0) {
+          await Notification.insertMany(notificationDocs);
+        }
+
         console.log(`Sent 10-min reminder for session ${session.title} to ${count} devices.`);
 
         // Mark as sent

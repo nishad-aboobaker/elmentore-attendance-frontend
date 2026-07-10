@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Notification = require('../models/Notification');
 const webpush = require('web-push');
 
 // Initialize Web Push with VAPID keys
@@ -67,7 +68,18 @@ exports.sendCustom = async (req, res) => {
 
     // Loop through users and their subscriptions
     const sendPromises = [];
+    const notificationDocs = [];
+
     users.forEach(user => {
+      // Create DB notification document
+      notificationDocs.push({
+        userId: user._id,
+        title,
+        message: body,
+        type: 'announcement',
+        isRead: false
+      });
+
       user.pushSubscriptions.forEach(sub => {
         sendPromises.push(
           webpush.sendNotification(sub, payload).catch(err => {
@@ -79,10 +91,47 @@ exports.sendCustom = async (req, res) => {
     });
 
     await Promise.allSettled(sendPromises);
+    if (notificationDocs.length > 0) {
+      await Notification.insertMany(notificationDocs);
+    }
 
     res.json({ message: `Custom notification blasted to ${sentCount} devices.` });
   } catch (err) {
     console.error('Custom notification error:', err);
     res.status(500).json({ message: 'Server error sending notification' });
+  }
+};
+
+// Fetch last 20 notifications for the logged-in user
+exports.getHistory = async (req, res) => {
+  try {
+    const notifications = await Notification.find({ userId: req.user.id })
+      .sort({ createdAt: -1 })
+      .limit(20);
+    res.json(notifications);
+  } catch (err) {
+    console.error('Fetch notifications error:', err);
+    res.status(500).json({ message: 'Server error fetching notifications' });
+  }
+};
+
+// Mark a notification as read
+exports.markAsRead = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    if (id === 'all') {
+      await Notification.updateMany({ userId: req.user.id, isRead: false }, { isRead: true });
+    } else {
+      await Notification.findOneAndUpdate(
+        { _id: id, userId: req.user.id },
+        { isRead: true }
+      );
+    }
+    
+    res.json({ message: 'Marked as read' });
+  } catch (err) {
+    console.error('Mark read error:', err);
+    res.status(500).json({ message: 'Server error marking notification as read' });
   }
 };

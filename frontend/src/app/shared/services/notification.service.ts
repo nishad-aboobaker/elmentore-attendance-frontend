@@ -39,4 +39,12 @@ export class NotificationService {
   sendCustomNotification(title: string, body: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/send-custom`, { title, body });
   }
+
+  getHistory(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/history`);
+  }
+
+  markAsRead(id: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/history/${id}/read`, {});
+  }
 }

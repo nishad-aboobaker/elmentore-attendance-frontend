@@ -19,6 +19,9 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
   currentTime = '';
   private clockInterval: any;
 
+  notifications: any[] = [];
+  unreadCount = 0;
+
   constructor(
     private sessionService: SessionService,
     public authService: AuthService,
@@ -34,6 +37,29 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     this.clockInterval = setInterval(() => this.updateClock(), 1000);
     
     this.checkNotificationStatus();
+    this.fetchNotifications();
+  }
+
+  fetchNotifications(): void {
+    this.notificationService.getHistory().subscribe({
+      next: (res) => {
+        this.notifications = res;
+        this.unreadCount = this.notifications.filter(n => !n.isRead).length;
+      },
+      error: (err) => console.error('Failed to fetch notifications', err)
+    });
+  }
+
+  markAsRead(id: string): void {
+    this.notificationService.markAsRead(id).subscribe(() => {
+      this.fetchNotifications();
+    });
+  }
+
+  markAllAsRead(): void {
+    this.notificationService.markAsRead('all').subscribe(() => {
+      this.fetchNotifications();
+    });
   }
 
   private checkNotificationStatus() {
