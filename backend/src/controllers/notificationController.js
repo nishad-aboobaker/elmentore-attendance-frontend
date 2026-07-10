@@ -50,8 +50,8 @@ exports.sendCustom = async (req, res) => {
       return res.status(400).json({ message: 'Title and body are required' });
     }
 
-    // Get all active employees who have push subscriptions
-    const users = await User.find({ isActive: true, 'pushSubscriptions.0': { $exists: true } });
+    // Get all active employees (regardless of push subscription)
+    const users = await User.find({ isActive: true, role: 'employee' });
     
     let sentCount = 0;
     const payload = JSON.stringify({
@@ -71,7 +71,7 @@ exports.sendCustom = async (req, res) => {
     const notificationDocs = [];
 
     users.forEach(user => {
-      // Create DB notification document
+      // Create DB notification document for EVERY active employee
       notificationDocs.push({
         userId: user._id,
         title,
@@ -80,14 +80,17 @@ exports.sendCustom = async (req, res) => {
         isRead: false
       });
 
-      user.pushSubscriptions.forEach(sub => {
-        sendPromises.push(
-          webpush.sendNotification(sub, payload).catch(err => {
-            console.error('Failed to send push to endpoint:', sub.endpoint, err.message);
-          })
-        );
-        sentCount++;
-      });
+      // Send push notification ONLY if they have subscriptions
+      if (user.pushSubscriptions && user.pushSubscriptions.length > 0) {
+        user.pushSubscriptions.forEach(sub => {
+          sendPromises.push(
+            webpush.sendNotification(sub, payload).catch(err => {
+              console.error('Failed to send push to endpoint:', sub.endpoint, err.message);
+            })
+          );
+          sentCount++;
+        });
+      }
     });
 
     await Promise.allSettled(sendPromises);
