@@ -5,6 +5,9 @@ import { UserService } from '../../shared/services/user.service';
 import { WorkingDay } from '../../shared/models/session.model';
 import { forkJoin } from 'rxjs';
 
+import { NotificationService } from '../../shared/services/notification.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -22,10 +25,15 @@ export class AdminDashboardComponent implements OnInit {
   };
   participationPercent = 0;
 
+  announcementTitle = '';
+  announcementBody = '';
+
   constructor(
     private sessionService: SessionService,
     private attendanceService: AttendanceService,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -72,5 +80,22 @@ export class AdminDashboardComponent implements OnInit {
         });
       });
     });
+  }
+
+  sendAnnouncement(): void {
+    if (!this.announcementTitle || !this.announcementBody) return;
+    
+    this.notificationService.sendCustomNotification(this.announcementTitle, this.announcementBody)
+      .subscribe({
+        next: (res) => {
+          this.snackBar.open(res.message || 'Announcement sent successfully!', 'Close', { duration: 3000 });
+          this.announcementTitle = '';
+          this.announcementBody = '';
+        },
+        error: (err) => {
+          console.error(err);
+          this.snackBar.open('Failed to send announcement.', 'Close', { duration: 3000 });
+        }
+      });
   }
 }

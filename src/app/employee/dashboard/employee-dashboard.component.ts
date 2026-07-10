@@ -4,6 +4,8 @@ import { WorkingDay } from '../../shared/models/session.model';
 import { AuthService } from '../../shared/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionDetailsDialogComponent } from './session-details-dialog.component';
+import { NotificationService } from '../../shared/services/notification.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -20,7 +22,9 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private sessionService: SessionService,
     public authService: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public notificationService: NotificationService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -28,6 +32,23 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     this.sessionService.getAll('active').subscribe((s) => this.activeSessions = s);
     this.updateClock();
     this.clockInterval = setInterval(() => this.updateClock(), 1000);
+    
+    this.checkNotificationStatus();
+  }
+
+  private checkNotificationStatus() {
+    if (this.notificationService.isEnabled) {
+      if (Notification.permission === 'default') {
+        const snackRef = this.snackBar.open('Enable push notifications for session reminders?', 'Enable', {
+          duration: 10000,
+        });
+        snackRef.onAction().subscribe(() => {
+          this.notificationService.subscribeToNotifications()
+            .then(() => this.snackBar.open('Notifications enabled!', 'Close', { duration: 3000 }))
+            .catch(() => this.snackBar.open('Failed to enable notifications.', 'Close', { duration: 3000 }));
+        });
+      }
+    }
   }
 
   ngOnDestroy(): void {

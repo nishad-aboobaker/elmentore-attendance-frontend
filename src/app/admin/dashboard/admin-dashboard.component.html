@@ -88,8 +88,30 @@
     </div>
   </div>
 
+  <!-- Send Announcement Section -->
+  <div class="section-card">
+    <div class="section-row">
+      <span class="section-title">Send Announcement</span>
+    </div>
+    <div style="margin-top: 15px;">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput [(ngModel)]="announcementTitle" placeholder="e.g., Urgent Meeting">
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Message</mat-label>
+        <textarea matInput [(ngModel)]="announcementBody" rows="2" placeholder="Message body..."></textarea>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" [disabled]="!announcementTitle || !announcementBody" (click)="sendAnnouncement()" style="width: 100%; border-radius: 12px; padding: 8px 0;">
+        <mat-icon>campaign</mat-icon> Blast to Employees
+      </button>
+    </div>
+  </div>
+
   <!-- Quick Action Buttons -->
-  <div class="quick-actions">
+  <div class="quick-actions" style="margin-top: 20px;">
     <button mat-raised-button color="primary" routerLink="/admin/sessions" class="action-full-btn">
       <mat-icon>event_note</mat-icon> Manage Sessions
     </button>
