@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { SessionService } from '../../shared/services/session.service';
 import { WorkingDay } from '../../shared/models/session.model';
 import * as L from 'leaflet';
@@ -27,11 +28,13 @@ export class SessionManagementComponent implements OnInit {
   sessionForm: FormGroup;
   editingSession: WorkingDay | null = null;
   showForm = false;
+  searchQuery = '';
+  
   private map: L.Map | undefined;
   private marker: L.Marker | undefined;
   private circle: L.Circle | undefined;
 
-  constructor(private sessionService: SessionService, private fb: FormBuilder) {
+  constructor(private sessionService: SessionService, private fb: FormBuilder, private http: HttpClient) {
     this.sessionForm = this.fb.group({
       title: ['', Validators.required],
       date: ['', Validators.required],
@@ -210,5 +213,57 @@ export class SessionManagementComponent implements OnInit {
     if (lat && lng) {
       this.updateMapMarker(lat, lng);
     }
+  }
+
+  useCurrentLocation(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          
+          this.sessionForm.patchValue({ location: { lat, lng } });
+          this.updateMapMarker(lat, lng);
+          if (this.map) {
+            this.map.setView([lat, lng], 15);
+          }
+        },
+        (err) => {
+          console.error('Error getting location', err);
+          alert('Could not get your current location. Please ensure location permissions are granted.');
+        }
+      );
+    } else {
+      alert('Geolocation is not supported by your browser.');
+    }
+  }
+
+  searchLocation(): void {
+    if (!this.searchQuery || this.searchQuery.trim() === '') return;
+    
+    // Use OpenStreetMap Nominatim API for free geocoding
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.searchQuery)}`;
+    
+    this.http.get<any[]>(url).subscribe({
+      next: (results) => {
+        if (results && results.length > 0) {
+          const firstResult = results[0];
+          const lat = parseFloat(firstResult.lat);
+          const lng = parseFloat(firstResult.lon);
+          
+          this.sessionForm.patchValue({ location: { lat, lng } });
+          this.updateMapMarker(lat, lng);
+          if (this.map) {
+            this.map.setView([lat, lng], 15);
+          }
+        } else {
+          alert('Location not found. Please try a different search term.');
+        }
+      },
+      error: (err) => {
+        console.error('Geocoding error', err);
+        alert('An error occurred while searching for the location.');
+      }
+    });
   }
 }

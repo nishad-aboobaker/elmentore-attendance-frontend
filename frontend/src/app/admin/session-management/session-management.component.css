@@ -225,6 +225,24 @@
   margin-top: 15px;
 }
 
+.map-controls {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 5px;
+}
+
+.search-field {
+  flex: 1;
+}
+
+.current-loc-btn {
+  height: 51px; /* Align with mat-form-field */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .geofence-map {
   width: 100%;
   height: 300px;

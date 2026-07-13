@@ -85,7 +85,19 @@
           
           <!-- Map Container -->
           <div class="map-container-wrapper">
-            <label class="field-label">Click on the map to set location:</label>
+            <label class="field-label">Find Location on Map:</label>
+            <div class="map-controls">
+              <mat-form-field appearance="outline" class="search-field">
+                <input matInput placeholder="Search location (e.g., Mumbai)" [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}" (keyup.enter)="searchLocation()">
+                <button mat-icon-button matSuffix (click)="searchLocation()">
+                  <mat-icon>search</mat-icon>
+                </button>
+              </mat-form-field>
+              
+              <button mat-stroked-button color="primary" type="button" class="current-loc-btn" (click)="useCurrentLocation()">
+                <mat-icon>my_location</mat-icon> Current
+              </button>
+            </div>
             <div id="geofence-map" class="geofence-map"></div>
           </div>
         </div>
