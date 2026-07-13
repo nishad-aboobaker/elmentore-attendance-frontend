@@ -88,10 +88,15 @@
             <label class="field-label">Find Location on Map:</label>
             <div class="map-controls">
               <mat-form-field appearance="outline" class="search-field">
-                <input matInput placeholder="Search location (e.g., Mumbai)" [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}" (keyup.enter)="searchLocation()">
+                <input matInput placeholder="Search location (e.g., Mumbai)" [formControl]="searchControl" [matAutocomplete]="auto" (keyup.enter)="searchLocation()">
                 <button mat-icon-button matSuffix (click)="searchLocation()">
                   <mat-icon>search</mat-icon>
                 </button>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onLocationSelected($event.option.value)">
+                  <mat-option *ngFor="let result of searchResults" [value]="result">
+                    {{ result.display_name }}
+                  </mat-option>
+                </mat-autocomplete>
               </mat-form-field>
               
               <button mat-stroked-button color="primary" type="button" class="current-loc-btn" (click)="useCurrentLocation()">

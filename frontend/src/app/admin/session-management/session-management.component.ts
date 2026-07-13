@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
 import { SessionService } from '../../shared/services/session.service';
 import { WorkingDay } from '../../shared/models/session.model';
 import * as L from 'leaflet';
@@ -28,11 +30,15 @@ export class SessionManagementComponent implements OnInit {
   sessionForm: FormGroup;
   editingSession: WorkingDay | null = null;
   showForm = false;
-  searchQuery = '';
+  
+  searchControl = new FormControl('');
+  searchResults: any[] = [];
+  private searchSub: Subscription | undefined;
   
   private map: L.Map | undefined;
   private marker: L.Marker | undefined;
   private circle: L.Circle | undefined;
+  private userLocationMarker: L.CircleMarker | undefined;
 
   constructor(private sessionService: SessionService, private fb: FormBuilder, private http: HttpClient) {
     this.sessionForm = this.fb.group({
@@ -63,6 +69,24 @@ export class SessionManagementComponent implements OnInit {
         }
       }
     });
+
+    this.searchSub = this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(query => {
+        if (!query || query.trim().length < 3) return of([]);
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`;
+        return this.http.get<any[]>(url).pipe(catchError(() => of([])));
+      })
+    ).subscribe(results => {
+      this.searchResults = results;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSub) {
+      this.searchSub.unsubscribe();
+    }
   }
 
   loadSessions(): void {
@@ -167,15 +191,31 @@ export class SessionManagementComponent implements OnInit {
 
     if (formLat && formLng) {
       this.updateMapMarker(initialLat, initialLng);
-    } else {
-      // Try to get user's current location to center map
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-          if (!this.sessionForm.get('location.lat')?.value && this.map) {
-             this.map.setView([pos.coords.latitude, pos.coords.longitude], 15);
+    }
+
+    // Always try to get user's current location to show where they are
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const uLat = pos.coords.latitude;
+        const uLng = pos.coords.longitude;
+        if (this.map) {
+          if (!this.userLocationMarker) {
+             this.userLocationMarker = L.circleMarker([uLat, uLng], {
+               radius: 8,
+               fillColor: '#ff0000',
+               color: '#fff',
+               weight: 2,
+               opacity: 1,
+               fillOpacity: 0.8
+             }).addTo(this.map).bindTooltip('You are here');
+          } else {
+             this.userLocationMarker.setLatLng([uLat, uLng]);
           }
-        });
-      }
+          if (!this.sessionForm.get('location.lat')?.value) {
+            this.map.setView([uLat, uLng], 15);
+          }
+        }
+      });
     }
 
     this.map.on('click', (e: L.LeafletMouseEvent) => {
@@ -226,6 +266,14 @@ export class SessionManagementComponent implements OnInit {
           this.updateMapMarker(lat, lng);
           if (this.map) {
             this.map.setView([lat, lng], 15);
+            // Also update the user location marker
+            if (!this.userLocationMarker) {
+               this.userLocationMarker = L.circleMarker([lat, lng], {
+                 radius: 8, fillColor: '#ff0000', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.8
+               }).addTo(this.map).bindTooltip('You are here');
+            } else {
+               this.userLocationMarker.setLatLng([lat, lng]);
+            }
           }
         },
         (err) => {
@@ -238,24 +286,36 @@ export class SessionManagementComponent implements OnInit {
     }
   }
 
+  onLocationSelected(result: any): void {
+    if (result) {
+      const lat = parseFloat(result.lat);
+      const lng = parseFloat(result.lon);
+      
+      this.sessionForm.patchValue({ location: { lat, lng } });
+      this.updateMapMarker(lat, lng);
+      if (this.map) {
+        this.map.setView([lat, lng], 15);
+      }
+      this.searchControl.setValue(result.display_name, { emitEvent: false });
+    }
+  }
+
   searchLocation(): void {
-    if (!this.searchQuery || this.searchQuery.trim() === '') return;
+    const val = this.searchControl.value;
+    if (!val || val.trim() === '') return;
     
-    // Use OpenStreetMap Nominatim API for free geocoding
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.searchQuery)}`;
+    // If they press enter, just select the first result if available
+    if (this.searchResults.length > 0) {
+       this.onLocationSelected(this.searchResults[0]);
+       return;
+    }
+    
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(val)}&limit=1`;
     
     this.http.get<any[]>(url).subscribe({
       next: (results) => {
         if (results && results.length > 0) {
-          const firstResult = results[0];
-          const lat = parseFloat(firstResult.lat);
-          const lng = parseFloat(firstResult.lon);
-          
-          this.sessionForm.patchValue({ location: { lat, lng } });
-          this.updateMapMarker(lat, lng);
-          if (this.map) {
-            this.map.setView([lat, lng], 15);
-          }
+           this.onLocationSelected(results[0]);
         } else {
           alert('Location not found. Please try a different search term.');
         }
