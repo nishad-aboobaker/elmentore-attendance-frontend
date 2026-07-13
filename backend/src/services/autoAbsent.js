@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Attendance = require('../models/Attendance');
 const Notification = require('../models/Notification');
 const webpush = require('web-push');
+const { buildISTDateTime } = require('../utils/timezone');
 
 const scheduleAutoAbsent = () => {
   cron.schedule('* * * * *', async () => {
@@ -15,9 +16,7 @@ const scheduleAutoAbsent = () => {
       });
 
       for (const session of sessions) {
-        const [endH, endM] = session.endTime.split(':').map(Number);
-        const sessionEnd = new Date(session.date);
-        sessionEnd.setUTCHours(endH, endM, 0, 0);
+        const sessionEnd = buildISTDateTime(session.date, session.endTime);
 
         if (now < sessionEnd) continue;
 

@@ -1,18 +1,7 @@
 const Attendance = require('../models/Attendance');
 const WorkingDay = require('../models/WorkingDay');
 const { isWithinGeofence } = require('../services/geofence');
-
-/**
- * Parse "HH:MM" string into a Date on the same calendar day as sessionDate.
- * Uses LOCAL time (not UTC) so times like "13:00" match the local clock.
- */
-function buildLocalDateTime(sessionDate, timeStr) {
-  const [h, m] = timeStr.split(':').map(Number);
-  const d = new Date(sessionDate);
-  d.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
-  d.setHours(h, m, 0, 0);   // local hours — no UTC offset issue
-  return d;
-}
+const { buildISTDateTime } = require('../utils/timezone');
 
 exports.checkIn = async (req, res) => {
   try {
@@ -28,8 +17,8 @@ exports.checkIn = async (req, res) => {
     }
 
     const now = new Date();
-    const sessionStart = buildLocalDateTime(session.date, session.startTime);
-    const sessionEnd   = buildLocalDateTime(session.date, session.endTime);
+    const sessionStart = buildISTDateTime(session.date, session.startTime);
+    const sessionEnd   = buildISTDateTime(session.date, session.endTime);
 
     // Allow check-in from 15 minutes before start until end
     const graceStart = new Date(sessionStart.getTime() - 15 * 60 * 1000);
@@ -88,7 +77,7 @@ exports.checkOut = async (req, res) => {
     }
 
     const now = new Date();
-    const sessionEnd = buildLocalDateTime(session.date, session.endTime);
+    const sessionEnd = buildISTDateTime(session.date, session.endTime);
 
     record.checkOut = { time: now > sessionEnd ? sessionEnd : now, lat, lng };
     await record.save();

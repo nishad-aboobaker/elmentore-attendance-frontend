@@ -3,28 +3,34 @@ const WorkingDay = require('../models/WorkingDay');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const webpush = require('web-push');
+const { getISTDate } = require('../utils/timezone');
 
 const scheduleNotifications = () => {
   // Run every minute
   cron.schedule('* * * * *', async () => {
     try {
-      const now = new Date();
+      const nowIST = getISTDate();
       // Calculate time 10 minutes from now (with a 1-minute buffer)
-      const tenMinsFromNow = new Date(now.getTime() + 10 * 60000);
+      const tenMinsFromNow = new Date(nowIST.getTime() + 10 * 60000);
       
-      const targetTimeStr = `${String(tenMinsFromNow.getHours()).padStart(2, '0')}:${String(tenMinsFromNow.getMinutes()).padStart(2, '0')}`;
+      const targetTimeStr = `${String(tenMinsFromNow.getUTCHours()).padStart(2, '0')}:${String(tenMinsFromNow.getUTCMinutes()).padStart(2, '0')}`;
       
       // Find upcoming sessions scheduled for today, matching the start time, where we haven't sent reminders yet
-      const startOfDay = new Date(now);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(now);
-      endOfDay.setHours(23, 59, 59, 999);
+      const startOfDay = new Date(nowIST);
+      startOfDay.setUTCHours(0, 0, 0, 0);
+      const endOfDay = new Date(nowIST);
+      endOfDay.setUTCHours(23, 59, 59, 999);
+
+      // Since DB date is stored as UTC (e.g., July 12 18:30 for July 13 IST),
+      // we can just adjust startOfDay to account for the -5.5 hours.
+      const adjustedStart = new Date(startOfDay.getTime() - (5.5 * 3600000));
+      const adjustedEnd = new Date(endOfDay.getTime() - (5.5 * 3600000));
 
       const sessions = await WorkingDay.find({
         status: 'upcoming',
-        date: { $gte: startOfDay, $lte: endOfDay },
+        date: { $gte: adjustedStart, $lte: adjustedEnd },
         startTime: targetTimeStr,
-        remindersSent: false
+        reminderSent: { $ne: true }
       });
 
       for (const session of sessions) {
