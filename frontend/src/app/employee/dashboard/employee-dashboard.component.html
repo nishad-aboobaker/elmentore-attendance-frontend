@@ -1,70 +1,163 @@
-<div class="emp-dashboard">
-
-  <!-- Greeting Header (reference: "WEDNESDAY, JUL 8 / Hello, Sarah") -->
-  <div class="greeting-header">
-    <div>
-      <p class="greeting-date">{{ today | date:'EEEE, MMM d' | uppercase }}</p>
-      <h1 class="greeting-name">Hello, {{ ((authService.currentUser$ | async)?.name || '').split(' ')[0] }}</h1>
+<div class="emp-dashboard-container">
+  <!-- Top Greeting Row -->
+  <div class="greeting-row">
+    <div class="greeting-info">
+      <p class="greeting-time">Good Afternoon, 👋</p>
+      <h1 class="greeting-user">{{ ((authService.currentUser$ | async)?.name || '').split(' ')[0] | uppercase }}</h1>
+      <p class="greeting-sub">Track your attendance and stay consistent.</p>
     </div>
-  </div>
-
-  <!-- Check-In Card (the big blue card in reference) -->
-  <div class="checkin-card">
-    <p class="checkin-hint" *ngIf="activeSessions.length === 0">No active session right now</p>
-    <p class="checkin-hint" *ngIf="activeSessions.length > 0">{{ activeSessions[0].title }}</p>
-    <div class="checkin-clock">{{ currentTime }}</div>
-    <a class="checkin-btn-wrap" [routerLink]="activeSessions.length > 0 ? '/employee/mark-attendance/' + activeSessions[0]._id : null">
-      <div class="checkin-circle" [class.disabled]="activeSessions.length === 0">
-        <mat-icon>login</mat-icon>
+    <div class="date-card">
+      <div class="date-card-icon">
+        <mat-icon>event</mat-icon>
       </div>
-    </a>
-    <p class="checkin-label">{{ activeSessions.length > 0 ? 'CHECK IN' : 'NO SESSION' }}</p>
-  </div>
-
-  <!-- Monthly Summary -->
-  <div class="section-row" style="padding: 0 16px;">
-    <span class="section-title">Monthly Summary</span>
-    <span class="month-badge">{{ today | date:'MMMM' }}</span>
-  </div>
-
-  <div class="monthly-grid">
-    <div class="summary-stat">
-      <span class="stat-number blue">{{ activeSessions.length }}</span>
-      <span class="stat-label">Active Sessions</span>
-    </div>
-    <div class="summary-stat">
-      <span class="stat-number orange">{{ upcomingSessions.length }}</span>
-      <span class="stat-label">Upcoming</span>
-    </div>
-    <div class="summary-stat">
-      <span class="stat-number green">—</span>
-      <span class="stat-label">Total Hours</span>
+      <div class="date-card-text">
+        <span class="date-card-day">{{ today | date:'EEEE' }}</span>
+        <span class="date-card-date">{{ today | date:'MMM d, y' }}</span>
+      </div>
     </div>
   </div>
 
-  <!-- Upcoming Sessions section -->
-  <div class="upcoming-section">
-    <div class="section-row">
-      <span class="section-title">Upcoming Sessions</span>
+  <!-- Today's Status Banner Card -->
+  <div class="status-card-gradient">
+    <div class="status-card-left">
+      <p class="status-card-label">Today's Status</p>
+      <h2 class="status-card-title">{{ activeSessions.length > 0 ? 'Not Marked' : 'No Active Session' }}</h2>
+      <p class="status-card-desc" *ngIf="activeSessions.length > 0">You haven't marked your attendance yet today.</p>
+      <p class="status-card-desc" *ngIf="activeSessions.length === 0">There are no active attendance sessions right now.</p>
+      
+      <a class="status-card-btn" 
+         *ngIf="activeSessions.length > 0" 
+         [routerLink]="'/employee/mark-attendance/' + activeSessions[0]._id">
+        <mat-icon>fingerprint</mat-icon>
+        <span>Mark Attendance</span>
+      </a>
     </div>
-    <div *ngIf="upcomingSessions.length === 0" class="empty-state">
-      <mat-icon>event_available</mat-icon>
-      <p>No upcoming sessions</p>
-    </div>
-    <div class="session-list" *ngIf="upcomingSessions.length > 0">
-      <div class="session-item" *ngFor="let s of upcomingSessions" (click)="openSessionDetails(s)" style="cursor: pointer;">
-        <div class="session-date-badge">
-          <span class="date-day">{{ s.date | date:'d' }}</span>
-          <span class="date-month">{{ s.date | date:'MMM' }}</span>
+
+    <div class="status-card-center">
+      <div class="progress-circle-outer">
+        <div class="progress-circle-inner">
+          <mat-icon>assignment_turned_in</mat-icon>
         </div>
-        <div class="session-item-info">
-          <p class="session-item-title">{{ s.title }}</p>
-          <p class="session-item-time">
-            <mat-icon style="font-size:13px;width:13px;height:13px;vertical-align:middle;">schedule</mat-icon>
-            {{ s.startTime | timeFormat }} – {{ s.endTime | timeFormat }}
-          </p>
+      </div>
+    </div>
+
+    <div class="status-card-right">
+      <div class="status-card-meta">
+        <span class="meta-label">Today's Date</span>
+        <span class="meta-value">{{ today | date:'MMM d, y' }}</span>
+      </div>
+      <div class="status-card-meta">
+        <span class="meta-label">Current Time</span>
+        <span class="meta-value">{{ currentTime }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overview Section -->
+  <div class="overview-section">
+    <div class="section-header">
+      <h3>Overview</h3>
+      <div class="select-filter">
+        <span>This Month</span>
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </div>
+    </div>
+
+    <div class="overview-grid">
+      <!-- Present Card -->
+      <div class="overview-card present">
+        <div class="overview-card-icon">
+          <mat-icon>event_available</mat-icon>
         </div>
-        <span class="badge badge-upcoming">Upcoming</span>
+        <div class="overview-card-content">
+          <span class="overview-value">{{ presentDays }}</span>
+          <span class="overview-label">Days Present</span>
+        </div>
+        <div class="overview-card-indicator blue"></div>
+      </div>
+
+      <!-- Absent Card -->
+      <div class="overview-card absent">
+        <div class="overview-card-icon">
+          <mat-icon>event_busy</mat-icon>
+        </div>
+        <div class="overview-card-content">
+          <span class="overview-value">{{ absentDays }}</span>
+          <span class="overview-label">Days Absent</span>
+        </div>
+        <div class="overview-card-indicator green"></div>
+      </div>
+
+      <!-- Attendance Percentage Card -->
+      <div class="overview-card percentage">
+        <div class="overview-card-icon">
+          <mat-icon>pie_chart</mat-icon>
+        </div>
+        <div class="overview-card-content">
+          <span class="overview-value">{{ attendancePercent }}%</span>
+          <span class="overview-label">Attendance %</span>
+        </div>
+        <div class="overview-card-indicator orange"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly Calendar Section -->
+  <div class="weekly-section">
+    <div class="section-header">
+      <h3>This Week</h3>
+      <div class="weekly-legend">
+        <span class="legend-item"><span class="legend-dot green"></span>Present</span>
+        <span class="legend-item"><span class="legend-dot red"></span>Absent</span>
+        <span class="legend-item"><span class="legend-dot grey"></span>Not Marked</span>
+      </div>
+    </div>
+
+    <div class="weekly-grid">
+      <div class="weekly-day" 
+           *ngFor="let day of thisWeekDays" 
+           [class.active-today]="day.isToday">
+        <span class="weekly-day-name">{{ day.name }}</span>
+        <span class="weekly-day-number">{{ day.date }}</span>
+        <div class="weekly-day-status">
+          <span class="status-dot" [ngClass]="day.status"></span>
+        </div>
+        <span class="today-tag" *ngIf="day.isToday">Today</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity Section -->
+  <div class="activity-section">
+    <div class="section-header">
+      <h3>Recent Activity</h3>
+      <a routerLink="/employee/my-attendance" class="view-all-link">View All <mat-icon>keyboard_arrow_right</mat-icon></a>
+    </div>
+
+    <!-- Empty State -->
+    <div class="activity-empty-card" *ngIf="recentActivity.length === 0">
+      <div class="activity-empty-icon">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <div class="activity-empty-text">
+        <h4>No attendance records yet.</h4>
+        <p>Start marking your attendance to see your history here.</p>
+      </div>
+    </div>
+
+    <!-- Activity List -->
+    <div class="activity-list" *ngIf="recentActivity.length > 0">
+      <div class="activity-item" *ngFor="let act of recentActivity">
+        <div class="activity-item-icon" [ngClass]="act.status">
+          <mat-icon>{{ act.status === 'present' || act.status === 'late' ? 'check_circle' : 'cancel' }}</mat-icon>
+        </div>
+        <div class="activity-item-details">
+          <h4>{{ act.title }}</h4>
+          <p>{{ act.date | date:'mediumDate' }} &bull; Check-In: {{ act.time ? (act.time | date:'shortTime') : 'N/A' }}</p>
+        </div>
+        <div class="activity-item-status">
+          <span class="status-badge" [ngClass]="act.status">{{ act.status | uppercase }}</span>
+        </div>
       </div>
     </div>
   </div>

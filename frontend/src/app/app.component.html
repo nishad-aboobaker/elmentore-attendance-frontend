@@ -52,10 +52,15 @@
         <mat-icon>history</mat-icon>
         <span>History</span>
       </a>
-      <a routerLink="/employee/mark-attendance" routerLinkActive="active">
-        <mat-icon>fingerprint</mat-icon>
+      
+      <!-- Big floating Check-In -->
+      <a routerLink="/employee/mark-attendance" routerLinkActive="active" class="floating-tab">
+        <div class="floating-btn">
+          <mat-icon>fingerprint</mat-icon>
+        </div>
         <span>Check-In</span>
       </a>
+
       <a routerLink="/employee/chat" routerLinkActive="active">
         <mat-icon>forum</mat-icon>
         <span>Chat</span>
