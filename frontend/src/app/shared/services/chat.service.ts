@@ -40,14 +40,12 @@ export class ChatService {
       this.socket.disconnect();
     }
     
-    // The environment.apiUrl is usually like http://domain/api, socket.io connects to the host root
-    // Example: apiUrl: 'http://localhost:3000/api' -> extract 'http://localhost:3000'
-    const baseUrl = this.apiUrl.replace('/api/chat', '');
+    const socketUrl = environment.socketUrl || 'http://localhost:3000';
     const token = this.authService.getAccessToken();
     
     if (!token) return;
 
-    this.socket = io(baseUrl, {
+    this.socket = io(socketUrl, {
       auth: { token }
     });
 
