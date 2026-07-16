@@ -37,7 +37,7 @@ mat-toolbar.top-nav-bar {
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .logo-icon-bg {
@@ -55,13 +55,15 @@ mat-toolbar.top-nav-bar {
 .logo-text {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  gap: 2px;
 }
 
 .logo-title {
   font-size: 1.1rem;
   font-weight: 800;
   color: #1e293b;
-  line-height: 1.1;
+  line-height: 1;
   letter-spacing: -0.02em;
 }
 
@@ -69,6 +71,7 @@ mat-toolbar.top-nav-bar {
   font-size: 0.65rem;
   font-weight: 500;
   color: #64748b;
+  line-height: 1;
 }
 
 .nav-right {
@@ -103,7 +106,9 @@ mat-toolbar.top-nav-bar {
 .user-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   text-align: left;
+  gap: 2px;
 }
 
 .user-name {
@@ -112,13 +117,14 @@ mat-toolbar.top-nav-bar {
   color: #1e293b;
   background: transparent;
   padding: 0;
-  line-height: 1.1;
+  line-height: 1;
 }
 
 .user-role {
   font-size: 0.65rem;
   font-weight: 500;
   color: #64748b;
+  line-height: 1;
 }
 
 .dropdown-icon {
