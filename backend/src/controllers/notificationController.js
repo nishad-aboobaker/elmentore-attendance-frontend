@@ -44,7 +44,8 @@ exports.sendCustom = async (req, res) => {
     // Get active target employees (regardless of push subscription)
     const query = { isActive: true, role: 'employee' };
     if (userIds && Array.isArray(userIds) && userIds.length > 0) {
-      query._id = { $in: userIds };
+      const mongoose = require('mongoose');
+      query._id = { $in: userIds.map(id => new mongoose.Types.ObjectId(id)) };
     }
 
     const users = await User.find(query);
