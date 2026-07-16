@@ -43,6 +43,7 @@ import { MarkAttendanceComponent } from './employee/mark-attendance/mark-attenda
 import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.component';
 import { NotificationsComponent } from './employee/notifications/notifications.component';
 import { SessionDetailsDialogComponent } from './employee/dashboard/session-details-dialog.component';
+import { GroupChatComponent } from './employee/chat/group-chat.component';
 import { TimeFormatPipe } from './shared/pipes/time-format.pipe';
 
 @NgModule({
@@ -59,6 +60,7 @@ import { TimeFormatPipe } from './shared/pipes/time-format.pipe';
     MyAttendanceComponent,
     NotificationsComponent,
     SessionDetailsDialogComponent,
+    GroupChatComponent,
     TimeFormatPipe
   ],
   imports: [

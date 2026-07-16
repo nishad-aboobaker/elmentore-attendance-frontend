@@ -32,13 +32,17 @@
         <mat-icon>group</mat-icon>
         <span>Users</span>
       </a>
+      <a routerLink="/admin/chat" routerLinkActive="active">
+        <mat-icon>forum</mat-icon>
+        <span>Chat</span>
+      </a>
       <a routerLink="/admin/reports" routerLinkActive="active">
         <mat-icon>bar_chart</mat-icon>
         <span>Reports</span>
       </a>
     </ng-container>
 
-    <!-- EMPLOYEE tabs: Home / History / Records (Check-In) / -->
+    <!-- EMPLOYEE tabs: Home / History / Check-In / Chat / Notifications -->
     <ng-container *ngIf="!authService.isAdmin()">
       <a routerLink="/employee/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
         <mat-icon>home</mat-icon>
@@ -52,9 +56,13 @@
         <mat-icon>fingerprint</mat-icon>
         <span>Check-In</span>
       </a>
+      <a routerLink="/employee/chat" routerLinkActive="active">
+        <mat-icon>forum</mat-icon>
+        <span>Chat</span>
+      </a>
       <a routerLink="/employee/notifications" routerLinkActive="active">
         <mat-icon [matBadge]="''" matBadgeColor="warn" [matBadgeHidden]="!(notificationService.unreadCount$ | async)">notifications</mat-icon>
-        <span>Notifications</span>
+        <span>Notifs</span>
       </a>
     </ng-container>
   </nav>

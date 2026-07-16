@@ -10,8 +10,12 @@ const sessionRoutes = require('./routes/session');
 const attendanceRoutes = require('./routes/attendance');
 const userRoutes = require('./routes/user');
 const notificationRoutes = require('./routes/notifications');
+const chatRoutes = require('./routes/chat');
+const { initSocket } = require('./utils/socket');
+const http = require('http');
 
 const app = express();
+const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.json());
@@ -25,6 +29,7 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -36,7 +41,11 @@ const PORT = process.env.PORT || 3000;
 connectDB().then(() => {
   scheduleAutoAbsent();
   scheduleNotifications();
-  app.listen(PORT, () => {
+  
+  // Initialize WebSocket server
+  initSocket(server);
+  
+  server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 });
