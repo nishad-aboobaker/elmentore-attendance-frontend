@@ -60,13 +60,14 @@ export class ChatService {
       return; // Already connected or connecting
     }
     
-    const socketUrl = environment.socketUrl || 'http://localhost:3000';
+    const socketUrl = environment.socketUrl || window.location.origin;
     const token = this.authService.getAccessToken();
     
     if (!token) return;
 
     this.socket = io(socketUrl, {
       auth: { token },
+      transports: ['polling', 'websocket'], // Allow falling back to polling if WebSocket upgrade is blocked
       reconnectionAttempts: 10,
       reconnectionDelay: 2000
     });

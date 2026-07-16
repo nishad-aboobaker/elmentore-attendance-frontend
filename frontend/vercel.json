@@ -2,6 +2,7 @@
   "version": 2,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "http://3.109.108.52/api/$1" },
+    { "source": "/socket.io/(.*)", "destination": "http://3.109.108.52/socket.io/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

@@ -1,9 +1,18 @@
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  padding-bottom: 65px; /* space for bottom nav */
+  position: fixed;
+  top: 60px;
+  bottom: 68px;
+  left: 0;
+  right: 0;
   background: var(--bg-app);
+}
+
+@media (max-width: 600px) {
+  .chat-container {
+    top: 56px;
+  }
 }
 
 .chat-header {
