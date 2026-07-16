@@ -9,6 +9,10 @@
   font-family: 'Inter', sans-serif;
 }
 
+.emp-dashboard-container > * {
+  flex-shrink: 0;
+}
+
 @media (max-width: 600px) {
   .emp-dashboard-container {
     padding: 16px;
