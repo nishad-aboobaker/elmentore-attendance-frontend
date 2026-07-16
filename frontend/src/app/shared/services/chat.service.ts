@@ -23,7 +23,16 @@ export class ChatService {
   constructor(
     private http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) {
+    // Keep connection alive globally across pages when logged in
+    this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.connect();
+      } else {
+        this.disconnect();
+      }
+    });
+  }
 
   // Fetch initial history
   getGlobalMessages(limit: number = 50): Observable<GroupMessage[]> {
@@ -31,13 +40,24 @@ export class ChatService {
   }
   
   setInitialMessages(messages: GroupMessage[]) {
-    this.messagesSubject.next(messages);
+    const currentMessages = this.messagesSubject.getValue();
+    
+    // Merge history and any real-time messages received in the background (avoiding duplicates)
+    const map = new Map<string, GroupMessage>();
+    messages.forEach(m => { if (m._id) map.set(m._id, m); });
+    currentMessages.forEach(m => { if (m._id) map.set(m._id, m); });
+    
+    const merged = Array.from(map.values()).sort((a, b) => {
+      return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+    });
+    
+    this.messagesSubject.next(merged);
   }
 
   // Connect to Socket.IO Server
   connect() {
     if (this.socket) {
-      this.socket.disconnect();
+      return; // Already connected or connecting
     }
     
     const socketUrl = environment.socketUrl || 'http://localhost:3000';
@@ -46,17 +66,27 @@ export class ChatService {
     if (!token) return;
 
     this.socket = io(socketUrl, {
-      auth: { token }
+      auth: { token },
+      reconnectionAttempts: 10,
+      reconnectionDelay: 2000
     });
 
     this.socket.on('connect', () => {
       console.log('Connected to Chat server');
+      
+      // On reconnect, fetch latest messages to recover any missed messages
+      this.getGlobalMessages(50).subscribe({
+        next: (msgs) => this.setInitialMessages(msgs),
+        error: (err) => console.error('Failed to sync chat history on reconnect', err)
+      });
     });
 
     this.socket.on('receiveGroupMessage', (message: GroupMessage) => {
       const currentMessages = this.messagesSubject.getValue();
-      this.messagesSubject.next([...currentMessages, message]);
-      this.onNewMessage.next(message);
+      if (!currentMessages.some(m => m._id === message._id)) {
+        this.messagesSubject.next([...currentMessages, message]);
+        this.onNewMessage.next(message);
+      }
     });
     
     this.socket.on('connect_error', (err) => {
@@ -68,7 +98,8 @@ export class ChatService {
     if (this.socket && this.socket.connected) {
       this.socket.emit('sendGroupMessage', { content });
     } else {
-      console.error('Cannot send message, socket not connected');
+      console.error('Cannot send message, socket not connected. Reconnecting...');
+      this.connect();
     }
   }
 

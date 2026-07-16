@@ -39,9 +39,6 @@ export class GroupChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       error: (err) => console.error('Failed to load chat history', err)
     });
 
-    // Connect WebSocket
-    this.chatService.connect();
-
     // Listen to message updates
     this.subs.add(this.chatService.messages$.subscribe(msgs => {
       this.messages = msgs;
@@ -77,6 +74,5 @@ export class GroupChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
-    this.chatService.disconnect();
   }
 }
