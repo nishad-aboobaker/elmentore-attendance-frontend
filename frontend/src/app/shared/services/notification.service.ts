@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SwPush } from '@angular/service-worker';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,9 @@ import { Observable } from 'rxjs';
 export class NotificationService {
   private readonly VAPID_PUBLIC_KEY = 'BIbM610khCQ0kk1RHqsVKDFv_eybTDQKpo3S6txVeTOZcR3PSL6glhqEhHhkEPWUb9Q3c1T3RHYRz_e5Z-tfQ_w';
   private apiUrl = `${environment.apiUrl}/notifications`;
+
+  private unreadCountSubject = new BehaviorSubject<number>(0);
+  unreadCount$ = this.unreadCountSubject.asObservable();
 
   constructor(private http: HttpClient, private swPush: SwPush) {}
 
@@ -41,10 +45,21 @@ export class NotificationService {
   }
 
   getHistory(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/history`);
+    return this.http.get<any[]>(`${this.apiUrl}/history`).pipe(
+      tap(res => {
+        const count = res.filter(n => !n.isRead).length;
+        this.unreadCountSubject.next(count);
+      })
+    );
+  }
+
+  fetchUnreadCount(): void {
+    this.getHistory().subscribe();
   }
 
   markAsRead(id: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/history/${id}/read`, {});
+    return this.http.put(`${this.apiUrl}/history/${id}/read`, {}).pipe(
+      tap(() => this.fetchUnreadCount())
+    );
   }
 }

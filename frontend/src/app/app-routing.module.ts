@@ -13,6 +13,7 @@ import { AttendanceReportsComponent } from './admin/attendance-reports/attendanc
 import { EmployeeDashboardComponent } from './employee/dashboard/employee-dashboard.component';
 import { MarkAttendanceComponent } from './employee/mark-attendance/mark-attendance.component';
 import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.component';
+import { NotificationsComponent } from './employee/notifications/notifications.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
@@ -38,6 +39,7 @@ const routes: Routes = [
       { path: 'mark-attendance', component: MarkAttendanceComponent },
       { path: 'mark-attendance/:id', component: MarkAttendanceComponent },
       { path: 'my-attendance', component: MyAttendanceComponent },
+      { path: 'notifications', component: NotificationsComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

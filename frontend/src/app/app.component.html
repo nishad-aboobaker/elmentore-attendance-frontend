@@ -52,6 +52,10 @@
         <mat-icon>fingerprint</mat-icon>
         <span>Check-In</span>
       </a>
+      <a routerLink="/employee/notifications" routerLinkActive="active">
+        <mat-icon [matBadge]="''" matBadgeColor="warn" [matBadgeHidden]="!(notificationService.unreadCount$ | async)">notifications</mat-icon>
+        <span>Notifications</span>
+      </a>
     </ng-container>
   </nav>
 </div>

@@ -41,6 +41,7 @@ import { AttendanceReportsComponent } from './admin/attendance-reports/attendanc
 import { EmployeeDashboardComponent } from './employee/dashboard/employee-dashboard.component';
 import { MarkAttendanceComponent } from './employee/mark-attendance/mark-attendance.component';
 import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.component';
+import { NotificationsComponent } from './employee/notifications/notifications.component';
 import { SessionDetailsDialogComponent } from './employee/dashboard/session-details-dialog.component';
 import { TimeFormatPipe } from './shared/pipes/time-format.pipe';
 
@@ -56,6 +57,7 @@ import { TimeFormatPipe } from './shared/pipes/time-format.pipe';
     EmployeeDashboardComponent,
     MarkAttendanceComponent,
     MyAttendanceComponent,
+    NotificationsComponent,
     SessionDetailsDialogComponent,
     TimeFormatPipe
   ],

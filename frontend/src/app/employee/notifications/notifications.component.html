@@ -1,0 +1,44 @@
+<div class="notifications-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Notifications</h1>
+    <button class="mark-all-btn" *ngIf="notifications.length > 0" (click)="markAllAsRead()">
+      Mark all as read
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="empty-state" *ngIf="loading && notifications.length === 0">
+    <mat-spinner diameter="32" style="margin: 0 auto 16px;"></mat-spinner>
+    <p>Loading notifications...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading && notifications.length === 0">
+    <mat-icon>notifications_off</mat-icon>
+    <p>No notifications yet</p>
+  </div>
+
+  <!-- Notification List -->
+  <div class="notifications-list" *ngIf="notifications.length > 0">
+    <div class="notification-item" 
+         *ngFor="let n of notifications" 
+         [class.unread]="!n.isRead"
+         (click)="!n.isRead ? markAsRead(n._id) : null"
+         style="cursor: pointer;">
+      
+      <div class="notification-icon-box">
+        <mat-icon>notifications</mat-icon>
+      </div>
+
+      <div class="notification-info">
+        <h3 class="notif-title">{{ n.title }}</h3>
+        <p class="notif-body">{{ n.message }}</p>
+        <span class="notif-time">{{ n.createdAt | date:'short' }}</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>

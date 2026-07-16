@@ -1,0 +1,121 @@
+/* Notifications CSS */
+.notifications-page {
+  background: var(--bg-app);
+  min-height: calc(100vh - 60px - 68px);
+  padding-bottom: 24px;
+  animation: fadeIn 0.3s ease;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 16px;
+}
+
+.page-title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.mark-all-btn {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.notifications-list {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notification-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.15s ease;
+  position: relative;
+}
+
+.notification-item.unread {
+  border-left: 4px solid var(--primary) !important;
+  background-color: var(--primary-light);
+}
+
+.notification-icon-box {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-app);
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.notification-item.unread .notification-icon-box {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.notification-info {
+  flex: 1;
+}
+
+.notif-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.notification-item.unread .notif-title {
+  color: var(--primary);
+}
+
+.notif-body {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.notif-time {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+}
+
+.empty-state mat-icon {
+  font-size: 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  opacity: 0.3;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
