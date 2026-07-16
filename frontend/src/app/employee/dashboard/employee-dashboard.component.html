@@ -107,9 +107,9 @@
     <div class="section-header">
       <h3>This Week</h3>
       <div class="weekly-legend">
-        <span class="legend-item"><span class="legend-dot green"></span>Present</span>
-        <span class="legend-item"><span class="legend-dot red"></span>Absent</span>
-        <span class="legend-item"><span class="legend-dot grey"></span>Not Marked</span>
+        <span class="legend-item"><span class="legend-circle green">P</span>Present</span>
+        <span class="legend-item"><span class="legend-circle red">A</span>Absent</span>
+        <span class="legend-item"><span class="legend-circle grey">-</span>Not Marked</span>
       </div>
     </div>
 
@@ -120,7 +120,7 @@
         <span class="weekly-day-name">{{ day.name }}</span>
         <span class="weekly-day-number">{{ day.date }}</span>
         <div class="weekly-day-status">
-          <span class="status-dot" [ngClass]="day.status"></span>
+          <span class="status-circle" [ngClass]="day.status">{{ day.status === 'present' ? 'P' : (day.status === 'absent' ? 'A' : '-') }}</span>
         </div>
         <span class="today-tag" *ngIf="day.isToday">Today</span>
       </div>

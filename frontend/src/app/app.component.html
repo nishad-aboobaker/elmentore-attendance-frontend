@@ -1,13 +1,31 @@
 <div class="app-layout" *ngIf="authService.currentUser$ | async">
-  <!-- Sticky Header Toolbar -->
-  <mat-toolbar color="primary">
-    <span class="logo">
-      <mat-icon style="vertical-align:middle; margin-right:6px; font-size:20px; width:20px; height:20px;">fingerprint</mat-icon>
-      Elmentore
-    </span>
-    <div class="user-actions">
-      <span class="user-name">{{ (authService.currentUser$ | async)?.name }}</span>
-      <button class="logout-btn" (click)="logout()">Logout</button>
+  <!-- White Top Header -->
+  <mat-toolbar class="top-nav-bar">
+    <div class="nav-left">
+      <button mat-icon-button class="menu-btn">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div class="logo-container">
+        <div class="logo-icon-bg">
+          <mat-icon>fingerprint</mat-icon>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Elmentore</span>
+          <span class="logo-subtitle">Attendance System</span>
+        </div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="user-profile-menu">
+        <div class="avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ ((authService.currentUser$ | async)?.name || '').split(' ')[0] | uppercase }}</span>
+          <span class="user-role">Student</span>
+        </div>
+        <mat-icon class="dropdown-icon">keyboard_arrow_down</mat-icon>
+      </div>
     </div>
   </mat-toolbar>
 
@@ -61,13 +79,13 @@
         <span>Check-In</span>
       </a>
 
-      <a routerLink="/employee/chat" routerLinkActive="active">
-        <mat-icon>forum</mat-icon>
-        <span>Chat</span>
+      <a routerLink="/employee/reports" routerLinkActive="active">
+        <mat-icon>bar_chart</mat-icon>
+        <span>Reports</span>
       </a>
-      <a routerLink="/employee/notifications" routerLinkActive="active">
-        <mat-icon [matBadge]="''" matBadgeColor="warn" [matBadgeHidden]="!(notificationService.unreadCount$ | async)">notifications</mat-icon>
-        <span>Notifs</span>
+      <a routerLink="/employee/profile" routerLinkActive="active">
+        <mat-icon>person_outline</mat-icon>
+        <span>Profile</span>
       </a>
     </ng-container>
   </nav>
