@@ -2,15 +2,21 @@
   <!-- Messages List -->
   <div class="chat-messages" #scrollMe>
     <div class="message-wrapper" 
-         *ngFor="let msg of messages"
-         [ngClass]="{'mine': msg.sender._id === currentUserId, 'others': msg.sender._id !== currentUserId}">
+         *ngFor="let msg of messages; let i = index"
+         [ngClass]="{
+           'mine': msg.sender._id === currentUserId, 
+           'others': msg.sender._id !== currentUserId,
+           'same-sender': i > 0 && messages[i-1].sender._id === msg.sender._id
+         }">
       
-      <div class="message-avatar" *ngIf="msg.sender._id !== currentUserId">
+      <div class="message-avatar" 
+           *ngIf="msg.sender._id !== currentUserId"
+           [style.visibility]="(i === 0 || messages[i-1].sender._id !== msg.sender._id) ? 'visible' : 'hidden'">
         {{ msg.sender.name.charAt(0) | uppercase }}
       </div>
       
       <div class="message-content">
-        <div class="message-author" *ngIf="msg.sender._id !== currentUserId">
+        <div class="message-author" *ngIf="msg.sender._id !== currentUserId && (i === 0 || messages[i-1].sender._id !== msg.sender._id)">
           {{ msg.sender.name }} <span class="author-dept" *ngIf="msg.sender.department">&bull; {{ msg.sender.department }}</span>
         </div>
         <div class="message-bubble">

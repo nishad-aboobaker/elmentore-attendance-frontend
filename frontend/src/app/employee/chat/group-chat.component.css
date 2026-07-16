@@ -65,6 +65,10 @@
   max-width: 85%;
 }
 
+.message-wrapper.same-sender {
+  margin-top: -10px; /* Bring consecutive messages from same sender closer */
+}
+
 .message-wrapper.mine {
   align-self: flex-end;
   flex-direction: row-reverse;
