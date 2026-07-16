@@ -3,7 +3,7 @@ const WorkingDay = require('../models/WorkingDay');
 const User = require('../models/User');
 const Attendance = require('../models/Attendance');
 const Notification = require('../models/Notification');
-const webpush = require('web-push');
+const webpush = require('../utils/push');
 const { buildISTDateTime } = require('../utils/timezone');
 
 const scheduleAutoAbsent = () => {

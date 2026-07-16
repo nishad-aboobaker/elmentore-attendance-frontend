@@ -2,7 +2,7 @@ const cron = require('node-cron');
 const WorkingDay = require('../models/WorkingDay');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
-const webpush = require('web-push');
+const webpush = require('../utils/push');
 const { getISTDate } = require('../utils/timezone');
 
 const scheduleNotifications = () => {

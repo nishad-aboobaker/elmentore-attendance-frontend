@@ -1,4 +1,7 @@
 const WorkingDay = require('../models/WorkingDay');
+const User = require('../models/User');
+const Notification = require('../models/Notification');
+const webpush = require('../utils/push');
 
 /**
  * Parse "HH:MM" string into a Date using LOCAL time (no UTC offset issues).
@@ -51,16 +54,7 @@ async function autoUpdateStatuses() {
       }
     }
 
-    if (session.status === 'active') {
-      // Complete if past endTime today
-      if (sessionDateStr === todayStr && now > endTime) {
-        await WorkingDay.findByIdAndUpdate(session._id, { status: 'completed' });
-      }
-      // Complete if session date is in the past
-      if (sessionDateStr < todayStr) {
-        await WorkingDay.findByIdAndUpdate(session._id, { status: 'completed' });
-      }
-    }
+
   }
 }
 
@@ -68,6 +62,56 @@ exports.create = async (req, res) => {
   try {
     const data = { ...req.body, createdBy: req.user._id };
     const session = await WorkingDay.create(data);
+
+    // Send push notification and save to Notification history for all active employees
+    const employees = await User.find({ isActive: true, role: 'employee' });
+    const sessionDateFormatted = new Date(session.date).toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    
+    const payload = JSON.stringify({
+      notification: {
+        title: 'New Session Scheduled',
+        body: `A new session '${session.title}' has been scheduled for ${sessionDateFormatted} from ${session.startTime} to ${session.endTime}.`,
+        icon: '/assets/icons/icon-192x192.png',
+        vibrate: [100, 50, 100],
+        data: { url: '/' }
+      }
+    });
+
+    const sendPromises = [];
+    const notificationDocs = [];
+
+    employees.forEach(emp => {
+      notificationDocs.push({
+        userId: emp._id,
+        title: 'New Session Scheduled',
+        message: `A new session '${session.title}' has been scheduled for ${sessionDateFormatted} from ${session.startTime} to ${session.endTime}.`,
+        type: 'session_created',
+        isRead: false
+      });
+
+      if (emp.pushSubscriptions && emp.pushSubscriptions.length > 0) {
+        emp.pushSubscriptions.forEach(sub => {
+          sendPromises.push(
+            webpush.sendNotification(sub, payload).catch(err => {
+              console.error('Failed to send push notification to endpoint:', sub.endpoint, err.message);
+            })
+          );
+        });
+      }
+    });
+
+    // Run this in background
+    Promise.allSettled(sendPromises).then(async () => {
+      if (notificationDocs.length > 0) {
+        await Notification.insertMany(notificationDocs);
+      }
+    }).catch(err => console.error('Error saving session creation notifications:', err));
+
     res.status(201).json(session);
   } catch (error) {
     res.status(500).json({ message: error.message });

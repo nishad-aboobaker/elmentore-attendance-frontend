@@ -1,15 +1,6 @@
 const User = require('../models/User');
 const Notification = require('../models/Notification');
-const webpush = require('web-push');
-
-// Initialize Web Push with VAPID keys
-if (process.env.PUBLIC_VAPID_KEY && process.env.PRIVATE_VAPID_KEY) {
-  webpush.setVapidDetails(
-    'mailto:admin@elmentore.com',
-    process.env.PUBLIC_VAPID_KEY,
-    process.env.PRIVATE_VAPID_KEY
-  );
-}
+const webpush = require('../utils/push');
 
 // Subscribe user to push notifications
 exports.subscribe = async (req, res) => {
