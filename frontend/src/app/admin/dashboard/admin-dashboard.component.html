@@ -120,6 +120,23 @@
         <textarea matInput [(ngModel)]="announcementBody" rows="2" placeholder="Message body..."></textarea>
       </mat-form-field>
 
+      <!-- Selection controls -->
+      <div style="margin-bottom: 16px;">
+        <mat-checkbox [(ngModel)]="sendToAll" style="margin-bottom: 8px; display: block;">
+          Send to all active employees
+        </mat-checkbox>
+
+        <!-- List of checkboxes for selecting specific employees -->
+        <div *ngIf="!sendToAll" class="employee-select-list" style="max-height: 150px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--r-md); padding: 12px; background: var(--bg-app); display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">Select Recipients</span>
+          <div *ngFor="let emp of employees">
+            <mat-checkbox [(ngModel)]="selectedEmployees[emp._id]">
+              {{ emp.name }} <span style="font-size: 0.75rem; color: var(--text-muted);">({{ emp.department || 'No Dept' }})</span>
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+
       <button mat-raised-button color="primary" [disabled]="!announcementTitle || !announcementBody" (click)="sendAnnouncement()" style="width: 100%; border-radius: 12px; padding: 8px 0;">
         <mat-icon>campaign</mat-icon> Blast to Employees
       </button>

@@ -40,8 +40,8 @@ export class NotificationService {
     }
   }
 
-  sendCustomNotification(title: string, body: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/send-custom`, { title, body });
+  sendCustomNotification(title: string, body: string, userIds?: string[]): Observable<any> {
+    return this.http.post(`${this.apiUrl}/send-custom`, { title, body, userIds });
   }
 
   getHistory(): Observable<any[]> {

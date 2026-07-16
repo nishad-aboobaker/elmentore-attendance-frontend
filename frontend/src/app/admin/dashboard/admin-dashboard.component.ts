@@ -27,6 +27,9 @@ export class AdminDashboardComponent implements OnInit {
 
   announcementTitle = '';
   announcementBody = '';
+  employees: any[] = [];
+  sendToAll = true;
+  selectedEmployees: { [key: string]: boolean } = {};
 
   notifications: any[] = [];
   unreadCount = 0;
@@ -55,8 +58,8 @@ export class AdminDashboardComponent implements OnInit {
 
       // 2. Fetch users to get total active employees
       this.userService.getAll().subscribe(users => {
-        const activeEmployees = users.filter(u => u.role === 'employee' && u.isActive);
-        this.stats.totalEmployees = activeEmployees.length;
+        this.employees = users.filter(u => u.role === 'employee' && u.isActive);
+        this.stats.totalEmployees = this.employees.length;
 
         if (todaysSessions.length === 0) {
            this.stats.absent = 0; // Nobody is absent if there are no sessions!
@@ -90,12 +93,23 @@ export class AdminDashboardComponent implements OnInit {
   sendAnnouncement(): void {
     if (!this.announcementTitle || !this.announcementBody) return;
     
-    this.notificationService.sendCustomNotification(this.announcementTitle, this.announcementBody)
+    let targetIds: string[] | undefined = undefined;
+    if (!this.sendToAll) {
+      targetIds = Object.keys(this.selectedEmployees).filter(id => this.selectedEmployees[id]);
+      if (targetIds.length === 0) {
+        this.snackBar.open('Please select at least one employee or choose "All".', 'Close', { duration: 3000 });
+        return;
+      }
+    }
+
+    this.notificationService.sendCustomNotification(this.announcementTitle, this.announcementBody, targetIds)
       .subscribe({
         next: (res) => {
           this.snackBar.open(res.message || 'Announcement sent successfully!', 'Close', { duration: 3000 });
           this.announcementTitle = '';
           this.announcementBody = '';
+          this.selectedEmployees = {};
+          this.sendToAll = true;
         },
         error: (err) => {
           console.error(err);

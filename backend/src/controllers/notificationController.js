@@ -35,14 +35,19 @@ exports.subscribe = async (req, res) => {
 // Send custom notification (Admin only)
 exports.sendCustom = async (req, res) => {
   try {
-    const { title, body } = req.body;
+    const { title, body, userIds } = req.body;
     
     if (!title || !body) {
       return res.status(400).json({ message: 'Title and body are required' });
     }
 
-    // Get all active employees (regardless of push subscription)
-    const users = await User.find({ isActive: true, role: 'employee' });
+    // Get active target employees (regardless of push subscription)
+    const query = { isActive: true, role: 'employee' };
+    if (userIds && Array.isArray(userIds) && userIds.length > 0) {
+      query._id = { $in: userIds };
+    }
+
+    const users = await User.find(query);
     
     let sentCount = 0;
     const payload = JSON.stringify({
