@@ -73,6 +73,10 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
             .then(() => this.snackBar.open('Notifications enabled!', 'Close', { duration: 3000 }))
             .catch(() => this.snackBar.open('Failed to enable notifications.', 'Close', { duration: 3000 }));
         });
+      } else if (Notification.permission === 'granted') {
+        this.notificationService.subscribeToNotifications().catch(err => {
+          console.warn('Failed to auto-subscribe to push notifications:', err);
+        });
       }
     }
   }
