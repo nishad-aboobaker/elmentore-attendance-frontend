@@ -63,15 +63,21 @@ mat-toolbar.top-nav-bar {
   font-size: 1.1rem;
   font-weight: 800;
   color: #1e293b;
-  line-height: 1;
+  line-height: 1.2;
   letter-spacing: -0.02em;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
 }
 
 .logo-subtitle {
   font-size: 0.65rem;
   font-weight: 500;
   color: #64748b;
-  line-height: 1;
+  line-height: 1.2;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
 }
 
 .nav-right {
@@ -116,15 +122,20 @@ mat-toolbar.top-nav-bar {
   font-weight: 700;
   color: #1e293b;
   background: transparent;
-  padding: 0;
-  line-height: 1;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1.2;
+  display: block;
 }
 
 .user-role {
   font-size: 0.65rem;
   font-weight: 500;
   color: #64748b;
-  line-height: 1;
+  line-height: 1.2;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
 }
 
 .dropdown-icon {
@@ -132,6 +143,9 @@ mat-toolbar.top-nav-bar {
   font-size: 20px;
   width: 20px;
   height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ---- CONTENT AREA ---- */
@@ -273,8 +287,5 @@ mat-toolbar.top-nav-bar {
 
 /* Mobile header scaling */
 @media (max-width: 600px) {
-  mat-toolbar { padding: 0 16px !important; height: 56px !important; min-height: 56px !important; }
-  mat-toolbar .logo { font-size: 1rem !important; }
-  .user-name { font-size: 0.75rem !important; padding: 3px 10px; }
-  .logout-btn { font-size: 0.75rem !important; height: 30px !important; }
+  mat-toolbar.top-nav-bar { padding: 0 16px !important; height: 56px !important; min-height: 56px !important; }
 }
