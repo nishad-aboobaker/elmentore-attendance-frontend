@@ -101,12 +101,22 @@
   border-radius: 24px;
   padding: 30px;
   color: #ffffff;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
   position: relative;
   overflow: hidden;
+}
+
+.status-card-gradient::before {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
 }
 
 .status-card-gradient::after {
@@ -123,30 +133,29 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  flex: 1;
 }
 
 .status-card-label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.05em;
+  opacity: 0.8;
   margin: 0 0 6px;
-  font-weight: 700;
 }
 
 .status-card-title {
-  font-size: 2.2rem;
-  font-weight: 900;
+  font-size: 1.6rem;
+  font-weight: 800;
   margin: 0 0 8px;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
 .status-card-desc {
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.85);
-  margin: 0 0 20px;
-  max-width: 280px;
+  opacity: 0.9;
+  margin: 0 0 16px;
+  line-height: 1.4;
 }
 
 .status-card-btn {
@@ -177,9 +186,8 @@
 
 .status-card-center {
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex: 1;
+  align-items: center;
 }
 
 .progress-circle-outer {
@@ -225,7 +233,8 @@
   flex-direction: column;
   gap: 16px;
   border-left: 1px solid rgba(255,255,255,0.2);
-  padding-left: 30px;
+  padding-left: 24px;
+  justify-self: end;
 }
 
 .status-card-meta {
@@ -250,13 +259,14 @@
     padding: 16px;
     border-radius: 16px;
     gap: 8px;
+    grid-template-columns: 1fr auto auto;
   }
   .status-card-title {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     margin-bottom: 4px;
   }
   .status-card-desc {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     max-width: 140px;
     margin-bottom: 12px;
   }
