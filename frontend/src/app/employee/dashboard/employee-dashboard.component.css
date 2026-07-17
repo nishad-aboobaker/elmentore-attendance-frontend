@@ -373,14 +373,14 @@
     border-radius: 10px;
   }
   .overview-card-icon {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     border-radius: 6px;
   }
   .overview-card-icon mat-icon {
-    font-size: 14px;
-    width: 10px;
-    height: 10px;
+    font-size: 10px;
+    width: 7.5px;
+    height: 7.5px;
   }
   .overview-value {
     font-size: 0.75rem;
