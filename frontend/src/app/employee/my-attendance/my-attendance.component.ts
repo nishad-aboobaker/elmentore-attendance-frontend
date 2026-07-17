@@ -40,7 +40,9 @@ export class MyAttendanceComponent implements OnInit {
               userId: 'unknown',
               sessionId: session as any,
               status: 'absent',
-              createdAt: session.date
+              isManualEntry: false,
+              createdAt: session.date,
+              updatedAt: session.date
             });
           }
         });
