@@ -328,11 +328,11 @@
   gap: 4px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 6px 12px;
+  border-radius: 20px;
+  padding: 4px 12px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #475569;
+  color: #2563eb;
   cursor: pointer;
 }
 
@@ -340,6 +340,7 @@
   font-size: 16px;
   width: 16px;
   height: 16px;
+  color: #2563eb;
 }
 
 .overview-grid {
@@ -379,21 +380,19 @@
 
 .overview-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+  border-radius: 20px;
   padding: 20px;
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
 }
 
 .overview-card-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -406,29 +405,30 @@
 }
 
 .absent .overview-card-icon {
-  background: #f0fdf4;
-  color: #16a34a;
+  background: #ecfdf5;
+  color: #10b981;
 }
 
 .percentage .overview-card-icon {
   background: #fff7ed;
-  color: #ea580c;
+  color: #f97316;
 }
 
 .overview-card-icon mat-icon {
-  font-size: 22px;
-  width: 22px;
-  height: 22px;
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
 }
 
 .overview-card-content {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .overview-value {
-  font-size: 1.6rem;
-  font-weight: 900;
+  font-size: 1.8rem;
+  font-weight: 800;
   color: #0f172a;
   line-height: 1.1;
   margin-bottom: 2px;
@@ -438,17 +438,18 @@
   font-size: 0.75rem;
   font-weight: 500;
   color: #64748b;
+  margin-bottom: 8px;
 }
 
-.overview-card-indicator {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 4px;
+.overview-indicator {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
 }
 
-.overview-card-indicator.blue { background: #2563eb; }
-.overview-card-indicator.green { background: #16a34a; }
-.overview-card-indicator.orange { background: #ea580c; }
+.overview-indicator.blue { background: #2563eb; }
+.overview-indicator.green { background: #10b981; }
+.overview-indicator.orange { background: #f97316; }
 
 /* ---- WEEKLY GRID ---- */
 .weekly-legend {

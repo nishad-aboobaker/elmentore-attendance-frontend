@@ -72,8 +72,8 @@
         <div class="overview-card-content">
           <span class="overview-value">{{ presentDays }}</span>
           <span class="overview-label">Days Present</span>
+          <div class="overview-indicator blue"></div>
         </div>
-        <div class="overview-card-indicator blue"></div>
       </div>
 
       <!-- Absent Card -->
@@ -84,20 +84,20 @@
         <div class="overview-card-content">
           <span class="overview-value">{{ absentDays }}</span>
           <span class="overview-label">Days Absent</span>
+          <div class="overview-indicator green"></div>
         </div>
-        <div class="overview-card-indicator green"></div>
       </div>
 
       <!-- Attendance Percentage Card -->
       <div class="overview-card percentage">
         <div class="overview-card-icon">
-          <mat-icon>pie_chart</mat-icon>
+          <mat-icon>pie_chart_outline</mat-icon>
         </div>
         <div class="overview-card-content">
           <span class="overview-value">{{ attendancePercent }}%</span>
           <span class="overview-label">Attendance %</span>
+          <div class="overview-indicator orange"></div>
         </div>
-        <div class="overview-card-indicator orange"></div>
       </div>
     </div>
   </div>
