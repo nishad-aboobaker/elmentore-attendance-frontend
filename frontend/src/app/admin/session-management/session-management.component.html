@@ -110,7 +110,7 @@
 
       <div class="form-actions">
         <button mat-button type="button" (click)="cancelForm()" class="cancel-btn">Cancel</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="sessionForm.invalid" class="save-btn">
+        <button mat-raised-button color="primary" type="submit" [disabled]="sessionForm.invalid || isSubmitting" class="save-btn">
           {{ editingSession ? 'Update Session' : 'Create Session' }}
         </button>
       </div>

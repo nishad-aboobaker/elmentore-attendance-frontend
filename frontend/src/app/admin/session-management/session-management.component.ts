@@ -30,6 +30,7 @@ export class SessionManagementComponent implements OnInit {
   sessionForm: FormGroup;
   editingSession: WorkingDay | null = null;
   showForm = false;
+  isSubmitting = false;
   
   searchControl = new FormControl('');
   searchResults: any[] = [];
@@ -125,17 +126,24 @@ export class SessionManagementComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.sessionForm.invalid) return;
+    if (this.sessionForm.invalid || this.isSubmitting) return;
+    this.isSubmitting = true;
     const data = this.sessionForm.value;
     if (this.editingSession) {
-      this.sessionService.update(this.editingSession._id, data).subscribe(() => {
-        this.loadSessions();
-        this.cancelForm();
+      this.sessionService.update(this.editingSession._id, data).subscribe({
+        next: () => {
+          this.loadSessions();
+          this.cancelForm();
+        },
+        error: () => this.isSubmitting = false
       });
     } else {
-      this.sessionService.create(data).subscribe(() => {
-        this.loadSessions();
-        this.cancelForm();
+      this.sessionService.create(data).subscribe({
+        next: () => {
+          this.loadSessions();
+          this.cancelForm();
+        },
+        error: () => this.isSubmitting = false
       });
     }
   }
@@ -162,6 +170,7 @@ export class SessionManagementComponent implements OnInit {
 
   cancelForm(): void {
     this.showForm = false;
+    this.isSubmitting = false;
     this.editingSession = null;
     this.sessionForm.reset();
     if (this.map) {
