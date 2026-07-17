@@ -19,7 +19,7 @@
         </div>
         <div class="user-info">
           <span class="user-name">{{ ((authService.currentUser$ | async)?.name || '').split(' ')[0] | uppercase }}</span>
-          <span class="user-role">{{ ((authService.currentUser$ | async)?.role || 'employee') | titlecase }}</span>
+          <span class="user-role">{{ ((authService.currentUser$ | async)?.department || (authService.currentUser$ | async)?.role || 'employee') | titlecase }}</span>
         </div>
         <mat-icon class="dropdown-icon">keyboard_arrow_down</mat-icon>
       </div>
