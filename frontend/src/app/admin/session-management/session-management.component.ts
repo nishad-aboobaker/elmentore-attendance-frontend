@@ -146,6 +146,12 @@ export class SessionManagementComponent implements OnInit {
     }
   }
 
+  deleteSession(id: string): void {
+    if (confirm('Are you sure you want to completely delete this session and all its attendance records? This action cannot be undone.')) {
+      this.sessionService.delete(id).subscribe(() => this.loadSessions());
+    }
+  }
+
   activateSession(id: string): void {
     this.sessionService.activate(id).subscribe(() => this.loadSessions());
   }

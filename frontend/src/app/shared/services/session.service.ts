@@ -39,4 +39,8 @@ export class SessionService {
   complete(id: string): Observable<WorkingDay> {
     return this.http.put<WorkingDay>(`${this.apiUrl}/${id}`, { status: 'completed' });
   }
+
+  delete(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }

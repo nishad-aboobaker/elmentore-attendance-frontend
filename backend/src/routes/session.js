@@ -11,5 +11,6 @@ router.get('/:id', sessionController.getById);
 router.post('/', checkRole('admin'), sessionController.create);
 router.put('/:id', checkRole('admin'), sessionController.update);
 router.patch('/:id/cancel', checkRole('admin'), sessionController.cancel);
+router.delete('/:id', checkRole('admin'), sessionController.delete);
 
 module.exports = router;

@@ -12,8 +12,19 @@
         </div>
       </div>
     </div>
-    <div class="nav-right">
-      <div class="user-profile-menu" [matMenuTriggerFor]="profileMenu" style="cursor: pointer;">
+    <div class="nav-right" style="display: flex; align-items: center; gap: 4px;">
+      
+      <!-- Employee Quick Links (Chat & Notifications) -->
+      <ng-container *ngIf="!authService.isAdmin()">
+        <button mat-icon-button routerLink="/employee/chat" title="Chat" style="color: #64748b;">
+          <mat-icon>forum</mat-icon>
+        </button>
+        <button mat-icon-button routerLink="/employee/notifications" title="Notifications" style="color: #64748b;">
+          <mat-icon>notifications</mat-icon>
+        </button>
+      </ng-container>
+
+      <div class="user-profile-menu" [matMenuTriggerFor]="profileMenu" style="cursor: pointer; margin-left: 8px;">
         <div class="avatar">
           <mat-icon>person</mat-icon>
         </div>

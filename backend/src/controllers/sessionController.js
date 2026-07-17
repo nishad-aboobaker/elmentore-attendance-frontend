@@ -171,3 +171,17 @@ exports.cancel = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.delete = async (req, res) => {
+  try {
+    const session = await WorkingDay.findByIdAndDelete(req.params.id);
+    if (!session) return res.status(404).json({ message: 'Session not found' });
+
+    const Attendance = require('../models/Attendance');
+    await Attendance.deleteMany({ sessionId: req.params.id });
+
+    res.json({ message: 'Session and related attendance records deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
