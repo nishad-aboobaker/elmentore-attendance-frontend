@@ -14,16 +14,6 @@
     </div>
     <div class="nav-right" style="display: flex; align-items: center; gap: 4px;">
       
-      <!-- Employee Quick Links (Chat & Notifications) -->
-      <ng-container *ngIf="!authService.isAdmin()">
-        <button mat-icon-button routerLink="/employee/chat" title="Chat" style="color: #64748b;">
-          <mat-icon>forum</mat-icon>
-        </button>
-        <button mat-icon-button routerLink="/employee/notifications" title="Notifications" style="color: #64748b;">
-          <mat-icon>notifications</mat-icon>
-        </button>
-      </ng-container>
-
       <div class="user-profile-menu" [matMenuTriggerFor]="profileMenu" style="cursor: pointer; margin-left: 8px;">
         <div class="avatar">
           <mat-icon>person</mat-icon>
@@ -79,13 +69,18 @@
       </a>
     </ng-container>
 
-    <!-- EMPLOYEE tabs: Home / Check-In / History -->
+    <!-- EMPLOYEE tabs: Home / History / Check-In / Chat / Notifications -->
     <ng-container *ngIf="!authService.isAdmin()">
       <a routerLink="/employee/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
         <mat-icon>home</mat-icon>
         <span>Home</span>
       </a>
       
+      <a routerLink="/employee/my-attendance" routerLinkActive="active">
+        <mat-icon>history</mat-icon>
+        <span>History</span>
+      </a>
+
       <!-- Big floating Check-In -->
       <a routerLink="/employee/mark-attendance" routerLinkActive="active" class="floating-tab">
         <div class="floating-btn">
@@ -94,9 +89,14 @@
         <span>Check-In</span>
       </a>
 
-      <a routerLink="/employee/my-attendance" routerLinkActive="active">
-        <mat-icon>history</mat-icon>
-        <span>History</span>
+      <a routerLink="/employee/chat" routerLinkActive="active">
+        <mat-icon>forum</mat-icon>
+        <span>Chat</span>
+      </a>
+
+      <a routerLink="/employee/notifications" routerLinkActive="active">
+        <mat-icon>notifications</mat-icon>
+        <span>Notifs</span>
       </a>
     </ng-container>
   </nav>

@@ -189,7 +189,7 @@ mat-toolbar.top-nav-bar {
   justify-content: center;
   text-decoration: none;
   color: var(--text-light);
-  width: 25%;
+  width: 20%;
   height: 100%;
   gap: 3px;
   transition: color 0.2s ease;
