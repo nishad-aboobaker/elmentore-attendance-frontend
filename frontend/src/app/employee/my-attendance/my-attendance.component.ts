@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { AttendanceService } from '../../shared/services/attendance.service';
+import { SessionService } from '../../shared/services/session.service';
 import { Attendance } from '../../shared/models/attendance.model';
+import { WorkingDay } from '../../shared/models/session.model';
 
 @Component({
   selector: 'app-my-attendance',
@@ -13,15 +16,52 @@ export class MyAttendanceComponent implements OnInit {
   lateCount = 0;
   overallPercent = 0;
 
-  constructor(private attendanceService: AttendanceService) {}
+  constructor(
+    private attendanceService: AttendanceService,
+    private sessionService: SessionService
+  ) {}
 
   ngOnInit(): void {
-    this.attendanceService.getMyAttendance().subscribe((r) => {
-      this.records = r;
-      this.presentCount = r.filter(rec => rec.status === 'present').length;
-      this.lateCount = r.filter(rec => rec.status === 'late').length;
-      const attended = this.presentCount + this.lateCount;
-      this.overallPercent = r.length > 0 ? Math.round((attended / r.length) * 100) : 0;
+    forkJoin({
+      history: this.attendanceService.getMyAttendance(),
+      allSessions: this.sessionService.getAll()
+    }).subscribe({
+      next: ({ history, allSessions }) => {
+        const completedSessions = allSessions.filter(s => s.status === 'completed');
+        let allRecords: Attendance[] = [...history];
+
+        completedSessions.forEach(session => {
+          const hasRecord = history.some(a => 
+            (typeof a.sessionId === 'object' ? a.sessionId._id : a.sessionId) === session._id
+          );
+          if (!hasRecord) {
+            allRecords.push({
+              _id: 'implicit-absent-' + session._id,
+              userId: 'unknown',
+              sessionId: session as any,
+              status: 'absent',
+              createdAt: session.date
+            });
+          }
+        });
+
+        allRecords.sort((a, b) => {
+          const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return dateB - dateA;
+        });
+
+        this.records = allRecords;
+        
+        this.presentCount = allRecords.filter(rec => rec.status === 'present').length;
+        this.lateCount = allRecords.filter(rec => rec.status === 'late').length;
+        const absentCount = allRecords.filter(rec => rec.status === 'absent').length;
+        
+        const total = this.presentCount + this.lateCount + absentCount;
+        const attended = this.presentCount + this.lateCount;
+        this.overallPercent = total > 0 ? Math.round((attended / total) * 100) : 0;
+      },
+      error: (err) => console.error('Failed to load attendance history', err)
     });
   }
 
