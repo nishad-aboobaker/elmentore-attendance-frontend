@@ -6,7 +6,7 @@
   gap: 24px;
   max-height: calc(100vh - 60px - 68px);
   overflow-y: auto;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .emp-dashboard-container > * {
@@ -58,7 +58,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px -2px rgba(0, 0, 0, 0.02);
 }
 
 .date-card-icon {
@@ -110,23 +112,25 @@
 }
 
 .status-card-gradient::before {
-  content: '';
+  content: "";
   position: absolute;
-  bottom: -40px; left: -40px;
+  bottom: -40px;
+  left: -40px;
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .status-card-gradient::after {
-  content: '';
+  content: "";
   position: absolute;
-  top: -50px; right: -50px;
+  top: -50px;
+  right: -50px;
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .status-card-left {
@@ -169,13 +173,15 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .status-card-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .status-card-btn mat-icon {
@@ -202,9 +208,12 @@
 }
 
 .progress-circle-outer::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: -8px; left: -8px; right: -8px; bottom: -8px;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
   border-radius: 50%;
   border: 8px solid transparent;
   border-top-color: #ffffff;
@@ -214,7 +223,7 @@
 .progress-circle-inner {
   width: 76px;
   height: 76px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -232,7 +241,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-left: 1px solid rgba(255,255,255,0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
   padding-left: 24px;
   justify-self: end;
 }
@@ -244,7 +253,7 @@
 
 .meta-label {
   font-size: 0.75rem;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 2px;
 }
 
@@ -286,7 +295,10 @@
   }
   .progress-circle-outer::before {
     border-width: 5px;
-    top: -5px; left: -5px; right: -5px; bottom: -5px;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
   }
   .progress-circle-inner {
     width: 48px;
@@ -361,21 +373,21 @@
     border-radius: 10px;
   }
   .overview-card-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 6px;
   }
   .overview-card-icon mat-icon {
     font-size: 14px;
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
   }
   .overview-value {
-    font-size: 0.95rem;
+    font-size: 0.75rem;
     margin-bottom: 0px;
   }
   .overview-label {
-    font-size: 0.6rem;
+    font-size: 0.4rem;
     margin-bottom: 3px;
     letter-spacing: -0.05em;
     line-height: 1.1;
@@ -455,9 +467,15 @@
   border-radius: 2px;
 }
 
-.overview-indicator.blue { background: #2563eb; }
-.overview-indicator.green { background: #10b981; }
-.overview-indicator.orange { background: #f97316; }
+.overview-indicator.blue {
+  background: #2563eb;
+}
+.overview-indicator.green {
+  background: #10b981;
+}
+.overview-indicator.orange {
+  background: #f97316;
+}
 
 /* ---- WEEKLY GRID ---- */
 .weekly-legend {
@@ -474,7 +492,8 @@
   color: #64748b;
 }
 
-.legend-circle, .status-circle {
+.legend-circle,
+.status-circle {
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -486,9 +505,19 @@
   color: #ffffff;
 }
 
-.legend-circle.green, .status-circle.present { background: #16a34a; }
-.legend-circle.red, .status-circle.absent { background: #ef4444; }
-.legend-circle.grey, .status-circle.not-marked { background: #e2e8f0; color: #64748b; }
+.legend-circle.green,
+.status-circle.present {
+  background: #16a34a;
+}
+.legend-circle.red,
+.status-circle.absent {
+  background: #ef4444;
+}
+.legend-circle.grey,
+.status-circle.not-marked {
+  background: #e2e8f0;
+  color: #64748b;
+}
 
 .weekly-grid {
   display: grid;
@@ -516,7 +545,7 @@
 
 .weekly-day.active-today {
   border-color: #2563eb;
-  box-shadow: 0 4px 12px rgba(37,99,235,0.08);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
 }
 
 .weekly-day-name {
@@ -574,7 +603,9 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px -2px rgba(0, 0, 0, 0.02);
 }
 
 .activity-empty-icon {
@@ -635,7 +666,8 @@
   flex-shrink: 0;
 }
 
-.activity-item-icon.present, .activity-item-icon.late {
+.activity-item-icon.present,
+.activity-item-icon.late {
   background: #f0fdf4;
   color: #16a34a;
 }
@@ -676,6 +708,15 @@
   letter-spacing: 0.02em;
 }
 
-.status-badge.present { background: #f0fdf4; color: #16a34a; }
-.status-badge.late { background: #fffbeb; color: #d97706; }
-.status-badge.absent { background: #fef2f2; color: #ef4444; }
+.status-badge.present {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.status-badge.late {
+  background: #fffbeb;
+  color: #d97706;
+}
+.status-badge.absent {
+  background: #fef2f2;
+  color: #ef4444;
+}
