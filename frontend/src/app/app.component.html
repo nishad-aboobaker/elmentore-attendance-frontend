@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="nav-right">
-      <div class="user-profile-menu">
+      <div class="user-profile-menu" [matMenuTriggerFor]="profileMenu" style="cursor: pointer;">
         <div class="avatar">
           <mat-icon>person</mat-icon>
         </div>
@@ -23,6 +23,17 @@
         </div>
         <mat-icon class="dropdown-icon">keyboard_arrow_down</mat-icon>
       </div>
+
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item routerLink="/employee/profile">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
     </div>
   </mat-toolbar>
 
@@ -57,15 +68,11 @@
       </a>
     </ng-container>
 
-    <!-- EMPLOYEE tabs: Home / History / Check-In / Chat / Notifications -->
+    <!-- EMPLOYEE tabs: Home / Check-In / History -->
     <ng-container *ngIf="!authService.isAdmin()">
       <a routerLink="/employee/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
         <mat-icon>home</mat-icon>
         <span>Home</span>
-      </a>
-      <a routerLink="/employee/my-attendance" routerLinkActive="active">
-        <mat-icon>history</mat-icon>
-        <span>History</span>
       </a>
       
       <!-- Big floating Check-In -->
@@ -76,13 +83,9 @@
         <span>Check-In</span>
       </a>
 
-      <a routerLink="/employee/reports" routerLinkActive="active">
-        <mat-icon>bar_chart</mat-icon>
-        <span>Reports</span>
-      </a>
-      <a routerLink="/employee/profile" routerLinkActive="active">
-        <mat-icon>person_outline</mat-icon>
-        <span>Profile</span>
+      <a routerLink="/employee/my-attendance" routerLinkActive="active">
+        <mat-icon>history</mat-icon>
+        <span>History</span>
       </a>
     </ng-container>
   </nav>
