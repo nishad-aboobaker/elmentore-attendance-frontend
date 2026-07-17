@@ -351,40 +351,38 @@
 
 @media (max-width: 650px) {
   .overview-grid {
-    gap: 12px;
+    gap: 8px;
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(180px, 1fr);
-    overflow-x: auto;
-    padding-bottom: 8px;
-    margin-right: -16px;
-    padding-right: 16px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .overview-grid::-webkit-scrollbar {
-    display: none;
+    grid-template-columns: repeat(3, 1fr);
   }
   .overview-card {
-    padding: 16px;
-    gap: 12px;
-    border-radius: 16px;
+    padding: 10px 6px;
+    gap: 6px;
+    border-radius: 12px;
   }
   .overview-card-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
   }
   .overview-card-icon mat-icon {
-    font-size: 22px;
-    width: 22px;
-    height: 22px;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
   }
   .overview-value {
-    font-size: 1.5rem;
+    font-size: 1rem;
+    margin-bottom: 2px;
   }
   .overview-label {
-    font-size: 0.7rem;
+    font-size: 0.55rem;
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+  .overview-indicator {
+    width: 16px;
+    height: 2px;
   }
 }
 
