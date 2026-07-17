@@ -124,14 +124,20 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  private getRecordDate(a: Attendance): Date | null {
+    const sessionObj = a.sessionId && typeof a.sessionId === 'object' ? (a.sessionId as any) : null;
+    const dateString = sessionObj && sessionObj.date ? sessionObj.date : a.createdAt;
+    return dateString ? new Date(dateString) : null;
+  }
+
   calculateStats(attendanceHistory: Attendance[], completedSessions: WorkingDay[]): void {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
     
     const thisMonthRecords = attendanceHistory.filter(a => {
-      if (!a.createdAt) return false;
-      const d = new Date(a.createdAt);
+      const d = this.getRecordDate(a);
+      if (!d) return false;
       return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
     });
     
@@ -178,8 +184,9 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
       const isToday = dayStr === today.toDateString();
       
       const record = attendanceHistory.find(a => {
-        if (!a.createdAt) return false;
-        return new Date(a.createdAt).toDateString() === dayStr;
+        const d = this.getRecordDate(a);
+        if (!d) return false;
+        return d.toDateString() === dayStr;
       });
       
       const sessionToday = completedSessions.find(s => new Date(s.date).toDateString() === dayStr);
@@ -205,12 +212,13 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     
     attendanceHistory.forEach(a => {
       const sessionObj = a.sessionId && typeof a.sessionId === 'object' ? a.sessionId : null;
+      const d = this.getRecordDate(a);
       activityItems.push({
         title: sessionObj ? sessionObj.title : 'Attendance Session',
-        date: a.createdAt,
+        date: d,
         time: a.checkIn && a.checkIn.time ? new Date(a.checkIn.time) : null,
         status: a.status === 'late' ? 'present' : a.status,
-        sortDate: new Date(a.createdAt || 0).getTime()
+        sortDate: d ? d.getTime() : 0
       });
     });
 
