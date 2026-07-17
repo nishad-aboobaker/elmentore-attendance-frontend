@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { SessionService } from '../../shared/services/session.service';
 import { WorkingDay } from '../../shared/models/session.model';
 import { AuthService } from '../../shared/services/auth.service';
@@ -41,17 +42,20 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.sessionService.getAll('upcoming').subscribe((s) => this.upcomingSessions = s);
-    this.sessionService.getAll('active').subscribe((s) => this.activeSessions = s);
-    
-    // Load attendance history to calculate metrics
-    this.attendanceService.getMyAttendance().subscribe({
-      next: (history) => {
-        this.calculateStats(history);
-        this.generateWeeklyCalendar(history);
-        this.populateRecentActivity(history);
+    forkJoin({
+      history: this.attendanceService.getMyAttendance(),
+      allSessions: this.sessionService.getAll()
+    }).subscribe({
+      next: ({ history, allSessions }) => {
+        this.upcomingSessions = allSessions.filter(s => s.status === 'upcoming');
+        this.activeSessions = allSessions.filter(s => s.status === 'active');
+        const completedSessions = allSessions.filter(s => s.status === 'completed');
+        
+        this.calculateStats(history, completedSessions);
+        this.generateWeeklyCalendar(history, completedSessions);
+        this.populateRecentActivity(history, completedSessions);
       },
-      error: (err) => console.error('Failed to load history', err)
+      error: (err) => console.error('Failed to load data', err)
     });
 
     this.updateClock();
@@ -120,7 +124,7 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  calculateStats(attendanceHistory: Attendance[]): void {
+  calculateStats(attendanceHistory: Attendance[], completedSessions: WorkingDay[]): void {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
@@ -132,13 +136,31 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     });
     
     this.presentDays = thisMonthRecords.filter(a => a.status === 'present' || a.status === 'late').length;
-    this.absentDays = thisMonthRecords.filter(a => a.status === 'absent').length;
+    
+    let absences = thisMonthRecords.filter(a => a.status === 'absent').length;
+
+    // Check completed sessions for implicit absences
+    const thisMonthCompleted = completedSessions.filter(s => {
+      const d = new Date(s.date);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    });
+
+    thisMonthCompleted.forEach(session => {
+      const hasRecord = attendanceHistory.some(a => 
+        (typeof a.sessionId === 'object' ? a.sessionId._id : a.sessionId) === session._id
+      );
+      if (!hasRecord) {
+        absences++;
+      }
+    });
+
+    this.absentDays = absences;
     
     const total = this.presentDays + this.absentDays;
     this.attendancePercent = total > 0 ? Math.round((this.presentDays / total) * 100) : 0;
   }
 
-  generateWeeklyCalendar(attendanceHistory: Attendance[]): void {
+  generateWeeklyCalendar(attendanceHistory: Attendance[], completedSessions: WorkingDay[]): void {
     const today = new Date();
     const currentDay = today.getDay();
     const dayOffset = currentDay === 0 ? -6 : 1 - currentDay;
@@ -160,9 +182,13 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
         return new Date(a.createdAt).toDateString() === dayStr;
       });
       
+      const sessionToday = completedSessions.find(s => new Date(s.date).toDateString() === dayStr);
+      
       let status = 'not-marked';
       if (record) {
         status = record.status === 'present' || record.status === 'late' ? 'present' : 'absent';
+      } else if (sessionToday) {
+        status = 'absent';
       }
       
       this.thisWeekDays.push({
@@ -174,19 +200,36 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  populateRecentActivity(attendanceHistory: Attendance[]): void {
-    const sorted = [...attendanceHistory].sort((a, b) => {
-      return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
-    });
+  populateRecentActivity(attendanceHistory: Attendance[], completedSessions: WorkingDay[]): void {
+    const activityItems: any[] = [];
     
-    this.recentActivity = sorted.slice(0, 3).map(a => {
+    attendanceHistory.forEach(a => {
       const sessionObj = a.sessionId && typeof a.sessionId === 'object' ? a.sessionId : null;
-      return {
+      activityItems.push({
         title: sessionObj ? sessionObj.title : 'Attendance Session',
         date: a.createdAt,
         time: a.checkIn && a.checkIn.time ? new Date(a.checkIn.time) : null,
-        status: a.status
-      };
+        status: a.status === 'late' ? 'present' : a.status,
+        sortDate: new Date(a.createdAt || 0).getTime()
+      });
     });
+
+    completedSessions.forEach(session => {
+      const hasRecord = attendanceHistory.some(a => 
+        (typeof a.sessionId === 'object' ? a.sessionId._id : a.sessionId) === session._id
+      );
+      if (!hasRecord) {
+        activityItems.push({
+          title: session.title || 'Attendance Session',
+          date: session.date,
+          time: null,
+          status: 'absent',
+          sortDate: new Date(session.date).getTime()
+        });
+      }
+    });
+
+    const sorted = activityItems.sort((a, b) => b.sortDate - a.sortDate);
+    this.recentActivity = sorted.slice(0, 3);
   }
 }
