@@ -57,10 +57,15 @@
   <div class="overview-section">
     <div class="section-header">
       <h3>Overview</h3>
-      <div class="select-filter">
-        <span>This Month</span>
+      <div class="select-filter" [matMenuTriggerFor]="filterMenu" style="cursor: pointer;">
+        <span>{{ filterLabel }}</span>
         <mat-icon>keyboard_arrow_down</mat-icon>
       </div>
+      <mat-menu #filterMenu="matMenu">
+        <button mat-menu-item (click)="setFilter('thisWeek', 'This Week')" [class.active-filter]="selectedFilter === 'thisWeek'">This Week</button>
+        <button mat-menu-item (click)="setFilter('thisMonth', 'This Month')" [class.active-filter]="selectedFilter === 'thisMonth'">This Month</button>
+        <button mat-menu-item (click)="setFilter('thisYear', 'This Year')" [class.active-filter]="selectedFilter === 'thisYear'">This Year</button>
+      </mat-menu>
     </div>
 
     <div class="overview-grid">

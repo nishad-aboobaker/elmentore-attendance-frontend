@@ -32,6 +32,11 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
   thisWeekDays: any[] = [];
   recentActivity: any[] = [];
 
+  fullHistory: Attendance[] = [];
+  fullCompletedSessions: WorkingDay[] = [];
+  selectedFilter: 'thisWeek' | 'thisMonth' | 'thisYear' = 'thisMonth';
+  filterLabel = 'This Month';
+
   constructor(
     private sessionService: SessionService,
     public authService: AuthService,
@@ -51,7 +56,10 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
         this.activeSessions = allSessions.filter(s => s.status === 'active');
         const completedSessions = allSessions.filter(s => s.status === 'completed');
         
-        this.calculateStats(history, completedSessions);
+        this.fullHistory = history;
+        this.fullCompletedSessions = completedSessions;
+
+        this.calculateStats();
         this.generateWeeklyCalendar(history, completedSessions);
         this.populateRecentActivity(history, completedSessions);
       },
@@ -130,29 +138,50 @@ export class EmployeeDashboardComponent implements OnInit, OnDestroy {
     return dateString ? new Date(dateString) : null;
   }
 
-  calculateStats(attendanceHistory: Attendance[], completedSessions: WorkingDay[]): void {
+  setFilter(filter: 'thisWeek' | 'thisMonth' | 'thisYear', label: string): void {
+    this.selectedFilter = filter;
+    this.filterLabel = label;
+    this.calculateStats();
+  }
+
+  calculateStats(): void {
     const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
     
-    const thisMonthRecords = attendanceHistory.filter(a => {
+    // Determine start and end dates based on filter
+    let startDate: Date;
+    let endDate = new Date(now);
+    
+    if (this.selectedFilter === 'thisWeek') {
+      const currentDay = now.getDay();
+      const dayOffset = currentDay === 0 ? -6 : 1 - currentDay; // Monday start
+      startDate = new Date(now);
+      startDate.setDate(now.getDate() + dayOffset);
+      startDate.setHours(0, 0, 0, 0);
+    } else if (this.selectedFilter === 'thisYear') {
+      startDate = new Date(now.getFullYear(), 0, 1);
+    } else {
+      // Default: This Month
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    }
+
+    const filteredRecords = this.fullHistory.filter(a => {
       const d = this.getRecordDate(a);
       if (!d) return false;
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+      return d >= startDate && d <= endDate;
     });
     
-    this.presentDays = thisMonthRecords.filter(a => a.status === 'present' || a.status === 'late').length;
+    this.presentDays = filteredRecords.filter(a => a.status === 'present' || a.status === 'late').length;
     
-    let absences = thisMonthRecords.filter(a => a.status === 'absent').length;
+    let absences = filteredRecords.filter(a => a.status === 'absent').length;
 
     // Check completed sessions for implicit absences
-    const thisMonthCompleted = completedSessions.filter(s => {
+    const filteredCompleted = this.fullCompletedSessions.filter(s => {
       const d = new Date(s.date);
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+      return d >= startDate && d <= endDate;
     });
 
-    thisMonthCompleted.forEach(session => {
-      const hasRecord = attendanceHistory.some(a => 
+    filteredCompleted.forEach(session => {
+      const hasRecord = this.fullHistory.some(a => 
         (typeof a.sessionId === 'object' ? a.sessionId._id : a.sessionId) === session._id
       );
       if (!hasRecord) {
