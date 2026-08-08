@@ -18,4 +18,12 @@ export class FundService {
   create(data: { type: 'cash_in' | 'cash_out', amount: number, details: string }): Observable<FundTransaction> {
     return this.http.post<FundTransaction>(this.apiUrl, data);
   }
+
+  update(id: string, data: { type: 'cash_in' | 'cash_out', amount: number, details: string }): Observable<FundTransaction> {
+    return this.http.put<FundTransaction>(`${this.apiUrl}/${id}`, data);
+  }
+
+  delete(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }

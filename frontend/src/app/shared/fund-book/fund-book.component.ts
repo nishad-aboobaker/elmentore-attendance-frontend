@@ -25,6 +25,7 @@ export class FundBookComponent implements OnInit {
   fundForm: FormGroup;
   showForm = false;
   isSubmitting = false;
+  editingTransactionId: string | null = null;
 
   constructor(
     private fundService: FundService,
@@ -143,10 +144,34 @@ export class FundBookComponent implements OnInit {
     this.selectedTransaction = null;
   }
 
+  startEdit(t: any): void {
+    this.editingTransactionId = t._id;
+    this.fundForm.patchValue({
+      type: t.type,
+      amount: t.amount,
+      details: t.details
+    });
+    this.showForm = true;
+    this.closeDetails();
+  }
+
+  deleteTransaction(id: string): void {
+    if (confirm('Are you sure you want to delete this transaction?')) {
+      this.fundService.delete(id).subscribe({
+        next: () => {
+          this.loadFunds();
+          this.closeDetails();
+        },
+        error: (err) => console.error('Failed to delete transaction', err)
+      });
+    }
+  }
+
   toggleForm(): void {
     this.showForm = !this.showForm;
     if (!this.showForm) {
       this.fundForm.reset({ type: 'cash_in' });
+      this.editingTransactionId = null;
     }
   }
 
@@ -154,14 +179,18 @@ export class FundBookComponent implements OnInit {
     if (this.fundForm.invalid || this.isSubmitting) return;
     this.isSubmitting = true;
 
-    this.fundService.create(this.fundForm.value).subscribe({
+    const request = this.editingTransactionId
+      ? this.fundService.update(this.editingTransactionId, this.fundForm.value)
+      : this.fundService.create(this.fundForm.value);
+
+    request.subscribe({
       next: () => {
         this.loadFunds();
         this.toggleForm();
         this.isSubmitting = false;
       },
       error: (err) => {
-        console.error('Failed to add transaction', err);
+        console.error('Failed to save transaction', err);
         this.isSubmitting = false;
       }
     });

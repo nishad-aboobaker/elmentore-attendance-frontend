@@ -489,6 +489,25 @@
   color: var(--text-secondary);
 }
 
+.detail-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.detail-actions button {
+  flex: 1;
+  height: 44px !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
 @keyframes scaleUp {
   from {
     transform: scale(0.92);

@@ -45,3 +45,34 @@ exports.createTransaction = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.updateTransaction = async (req, res) => {
+  try {
+    const { type, amount, details } = req.body;
+    let transaction = await FundTransaction.findById(req.params.id);
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transaction not found' });
+    }
+    transaction.type = type || transaction.type;
+    transaction.amount = amount !== undefined ? Number(amount) : transaction.amount;
+    transaction.details = details || transaction.details;
+    
+    await transaction.save();
+    res.json(transaction);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteTransaction = async (req, res) => {
+  try {
+    const transaction = await FundTransaction.findById(req.params.id);
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transaction not found' });
+    }
+    await transaction.deleteOne();
+    res.json({ message: 'Transaction deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
