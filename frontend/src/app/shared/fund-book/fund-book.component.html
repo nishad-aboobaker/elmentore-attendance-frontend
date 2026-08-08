@@ -83,7 +83,7 @@
     <div class="date-group" *ngFor="let group of groupedTransactions">
       <div class="date-group-header">{{ group.date }}</div>
       
-      <div class="transaction-item" *ngFor="let t of group.transactions">
+      <div class="transaction-item" *ngFor="let t of group.transactions" (click)="showDetails(t)" style="cursor: pointer;">
         <div class="t-details">
           <h4 class="t-title">{{ t.details }}</h4>
           <p class="t-meta">
@@ -126,6 +126,47 @@
       <span class="stat-val" [ngClass]="{'green-text': availableBalance >= 0, 'red-text': availableBalance < 0}">
         {{ availableBalance | number:'1.2-2' }}
       </span>
+    </div>
+  </div>
+
+  <!-- Transaction Details Modal -->
+  <div class="modal-backdrop" *ngIf="selectedTransaction" (click)="closeDetails()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Transaction Details</h3>
+        <button mat-icon-button (click)="closeDetails()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-type-badge" [ngClass]="selectedTransaction.type">
+          <mat-icon>{{ selectedTransaction.type === 'cash_in' ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
+          <span>{{ selectedTransaction.type === 'cash_in' ? 'Cash In' : 'Cash Out' }}</span>
+        </div>
+        
+        <div class="detail-amount" [ngClass]="selectedTransaction.type">
+          ₹{{ selectedTransaction.amount | number:'1.2-2' }}
+        </div>
+        
+        <div class="detail-grid">
+          <div class="detail-row">
+            <span class="detail-lbl">Description</span>
+            <span class="detail-val desc-text">{{ selectedTransaction.details }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-lbl">Date & Time</span>
+            <span class="detail-val">{{ selectedTransaction.date | date:'medium' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-lbl">Recorded By</span>
+            <span class="detail-val">{{ selectedTransaction.createdBy?.name || 'Admin' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-lbl">Running Balance</span>
+            <span class="detail-val balance-text">₹{{ selectedTransaction.runningBalance | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

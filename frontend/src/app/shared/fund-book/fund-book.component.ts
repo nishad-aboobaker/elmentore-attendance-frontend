@@ -20,6 +20,7 @@ export class FundBookComponent implements OnInit {
   availableBalance = 0;
   
   currentFilter: 'all' | 'daily' | 'weekly' | 'monthly' | 'yearly' = 'all';
+  selectedTransaction: any = null;
   
   fundForm: FormGroup;
   showForm = false;
@@ -132,6 +133,14 @@ export class FundBookComponent implements OnInit {
       group.transactions.push(t);
     });
     this.groupedTransactions = groups;
+  }
+
+  showDetails(t: any): void {
+    this.selectedTransaction = t;
+  }
+
+  closeDetails(): void {
+    this.selectedTransaction = null;
   }
 
   toggleForm(): void {
