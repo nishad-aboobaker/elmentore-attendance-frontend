@@ -2,7 +2,7 @@
   padding: 16px;
   max-width: 800px;
   margin: 0 auto;
-  padding-bottom: 100px; /* Space for sticky bottom stats */
+  padding-bottom: 180px; /* Space for sticky bottom stats */
 }
 
 .header {
@@ -297,7 +297,7 @@
   border-radius: 8px;
   box-shadow: var(--shadow-md);
   position: fixed;
-  bottom: 80px; /* Floating above bottom navigation */
+  bottom: 110px; /* Floating above bottom navigation & Check-In button */
   left: 16px;
   right: 16px;
   max-width: 768px;
@@ -348,7 +348,7 @@
   .bottom-stats-bar {
     left: 8px;
     right: 8px;
-    bottom: 70px;
+    bottom: 95px;
   }
   .stat-val {
     font-size: 0.95rem;
