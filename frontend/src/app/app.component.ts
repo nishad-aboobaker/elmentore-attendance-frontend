@@ -12,6 +12,7 @@ import { startWith } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'elmentore-attendance';
+  isDarkMode = false;
   private authSubscription!: Subscription;
   private pollSubscription!: Subscription;
 
@@ -22,6 +23,16 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Load theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      this.isDarkMode = true;
+      document.body.classList.add('dark-theme');
+    } else {
+      this.isDarkMode = false;
+      document.body.classList.remove('dark-theme');
+    }
+
     // Poll notifications count every 30 seconds if user is logged in
     this.authSubscription = this.authService.currentUser$.subscribe(user => {
       if (this.pollSubscription) {
@@ -36,6 +47,17 @@ export class AppComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
   }
 
   logout(): void {

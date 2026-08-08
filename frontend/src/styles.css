@@ -506,3 +506,217 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font); font-weight: 700; margin: 0; }
   .login-card { padding: 24px 20px !important; border-radius: 20px !important; }
   .form-heading { font-size: 1.25rem; }
 }
+
+/* ==========================================
+   DARK THEME DEFINITION
+   ========================================== */
+.dark-theme {
+  --primary: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --primary-light: #1e293b;
+  --primary-mid: #60a5fa;
+  --primary-glow: rgba(59, 130, 246, 0.15);
+
+  --success: #4ade80;
+  --success-light: #064e3b;
+  --success-text: #34d399;
+
+  --warning: #fb923c;
+  --warning-light: #7c2d12;
+  --warning-text: #fdba74;
+
+  --danger: #f87171;
+  --danger-light: #7f1d1d;
+  --danger-text: #fca5a5;
+
+  --absent: #6b7280;
+  --absent-light: #374151;
+
+  /* Surfaces */
+  --bg-app: #0f172a;          /* Slate 900 */
+  --bg-card: #1e293b;         /* Slate 800 */
+  --bg-header: #1e293b;
+  --bg-input: #334155;        /* Slate 700 */
+
+  /* Text */
+  --text-primary: #f8fafc;    /* Slate 50 */
+  --text-secondary: #e2e8f0;  /* Slate 200 */
+  --text-muted: #94a3b8;      /* Slate 400 */
+  --text-light: #64748b;      /* Slate 500 */
+  --text-white: #ffffff;
+
+  /* Borders */
+  --border: #334155;          /* Slate 700 */
+  --border-strong: #475569;   /* Slate 600 */
+}
+
+/* General Dark Theme Overrides for Material components */
+.dark-theme .mat-toolbar.top-nav-bar {
+  background-color: var(--bg-card) !important;
+  border-bottom-color: var(--border) !important;
+}
+
+.dark-theme .top-nav-bar .nav-right .theme-toggle-btn {
+  color: var(--text-secondary) !important;
+}
+
+.dark-theme .avatar {
+  background-color: var(--border) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .bottom-nav {
+  background-color: var(--bg-card) !important;
+  border-top-color: var(--border) !important;
+}
+
+.dark-theme .bottom-nav a {
+  color: var(--text-muted) !important;
+}
+
+.dark-theme .bottom-nav a.active {
+  color: var(--primary) !important;
+}
+
+/* Custom Cards and Inputs */
+.dark-theme .mat-mdc-card {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border) !important;
+}
+
+.dark-theme .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background-color: var(--bg-app) !important;
+  border-color: var(--border) !important;
+}
+
+.dark-theme .mat-mdc-form-field-infix input {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .mat-mdc-table {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border) !important;
+}
+
+.dark-theme .mat-mdc-header-row {
+  background-color: var(--bg-app) !important;
+}
+
+.dark-theme .mat-mdc-header-cell,
+.dark-theme .mat-mdc-cell {
+  color: var(--text-secondary) !important;
+  border-bottom-color: var(--border) !important;
+}
+
+.dark-theme .mat-mdc-row:hover {
+  background-color: var(--bg-app) !important;
+}
+
+/* Material Menus and Dialogs */
+.dark-theme .mat-mdc-menu-panel {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.dark-theme .mat-mdc-menu-item {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.dark-theme .mdc-dialog__title {
+  color: var(--text-primary) !important;
+}
+
+/* Chat & Dialog overrides */
+.dark-theme .message-bubble.other {
+  background-color: var(--bg-app) !important;
+  color: var(--text-primary) !important;
+}
+.dark-theme .message-bubble.me {
+  background-color: var(--primary) !important;
+  color: #fff !important;
+}
+.dark-theme .chat-input-container {
+  background-color: var(--bg-card) !important;
+  border-top-color: var(--border) !important;
+}
+.dark-theme .chat-input-container input {
+  background-color: var(--bg-app) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border) !important;
+}
+
+/* Material Button Toggle Overrides */
+.dark-theme .mat-button-toggle-group {
+  border-color: var(--border) !important;
+  background-color: var(--bg-app) !important;
+}
+.dark-theme .mat-button-toggle {
+  background-color: transparent !important;
+  border-color: var(--border) !important;
+  color: var(--text-muted) !important;
+}
+.dark-theme .mat-button-toggle-checked {
+  background-color: var(--border) !important;
+}
+.dark-theme .mat-button-toggle-checked.cash-in {
+  color: #4ade80 !important;
+}
+.dark-theme .mat-button-toggle-checked.cash-out {
+  color: #f87171 !important;
+}
+
+/* Transaction specific modal */
+.dark-theme .modal-content {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border) !important;
+}
+.dark-theme .detail-grid {
+  background-color: var(--bg-app) !important;
+  border-color: var(--border) !important;
+}
+.dark-theme .detail-val {
+  color: var(--text-primary) !important;
+}
+.dark-theme .bottom-stats-bar {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border) !important;
+}
+.dark-theme .stat-col.border-right {
+  border-right-color: var(--border) !important;
+}
+.dark-theme .date-group-header {
+  background-color: var(--bg-app) !important;
+  border-bottom-color: var(--border) !important;
+}
+.dark-theme .transaction-item {
+  background-color: var(--bg-card) !important;
+  border-bottom-color: var(--border) !important;
+}
+.dark-theme .transaction-item:hover {
+  background-color: var(--bg-app) !important;
+}
+.dark-theme .column-header-row {
+  background-color: var(--bg-app) !important;
+  border-bottom-color: var(--border) !important;
+}
+.dark-theme .filter-pill {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border) !important;
+  color: var(--text-secondary) !important;
+}
+.dark-theme .filter-pill.active {
+  background-color: var(--primary) !important;
+  color: #fff !important;
+  border-color: var(--primary) !important;
+}
+.dark-theme .form-card {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border) !important;
+}
+
