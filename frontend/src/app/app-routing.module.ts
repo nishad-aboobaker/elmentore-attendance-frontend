@@ -15,6 +15,7 @@ import { MarkAttendanceComponent } from './employee/mark-attendance/mark-attenda
 import { MyAttendanceComponent } from './employee/my-attendance/my-attendance.component';
 import { NotificationsComponent } from './employee/notifications/notifications.component';
 import { GroupChatComponent } from './employee/chat/group-chat.component';
+import { FundBookComponent } from './shared/fund-book/fund-book.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
@@ -29,6 +30,7 @@ const routes: Routes = [
       { path: 'users', component: UserManagementComponent },
       { path: 'reports', component: AttendanceReportsComponent },
       { path: 'chat', component: GroupChatComponent },
+      { path: 'fund', component: FundBookComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
@@ -43,6 +45,7 @@ const routes: Routes = [
       { path: 'my-attendance', component: MyAttendanceComponent },
       { path: 'notifications', component: NotificationsComponent },
       { path: 'chat', component: GroupChatComponent },
+      { path: 'fund', component: FundBookComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

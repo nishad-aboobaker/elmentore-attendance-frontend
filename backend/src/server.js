@@ -11,6 +11,7 @@ const attendanceRoutes = require('./routes/attendance');
 const userRoutes = require('./routes/user');
 const notificationRoutes = require('./routes/notifications');
 const chatRoutes = require('./routes/chat');
+const fundRoutes = require('./routes/fund');
 const { initSocket } = require('./utils/socket');
 const http = require('http');
 
@@ -30,6 +31,7 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/funds', fundRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -45,6 +45,7 @@ import { NotificationsComponent } from './employee/notifications/notifications.c
 import { SessionDetailsDialogComponent } from './employee/dashboard/session-details-dialog.component';
 import { GroupChatComponent } from './employee/chat/group-chat.component';
 import { TimeFormatPipe } from './shared/pipes/time-format.pipe';
+import { FundBookComponent } from './shared/fund-book/fund-book.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { TimeFormatPipe } from './shared/pipes/time-format.pipe';
     NotificationsComponent,
     SessionDetailsDialogComponent,
     GroupChatComponent,
-    TimeFormatPipe
+    TimeFormatPipe,
+    FundBookComponent
   ],
   imports: [
     BrowserModule,
