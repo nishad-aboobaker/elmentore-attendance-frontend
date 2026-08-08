@@ -92,16 +92,18 @@
   margin-bottom: 16px;
 }
 
-.type-selector mat-button-toggle-group {
+.type-toggle-group {
   margin-bottom: 20px;
   border-radius: 8px;
-  display: flex;
-  width: 100%;
+  display: flex !important;
+  width: 100% !important;
+  overflow: hidden;
 }
 
 .type-btn {
-  flex: 1;
+  flex: 1 !important;
   padding: 4px 0;
+  text-align: center;
 }
 
 .type-btn.cash-in {

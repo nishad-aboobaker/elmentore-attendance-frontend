@@ -28,7 +28,7 @@
     <form [formGroup]="fundForm" (ngSubmit)="onSubmit()" class="fund-form">
       
       <div class="form-row type-selector">
-        <mat-button-toggle-group formControlName="type" class="full-width">
+        <mat-button-toggle-group formControlName="type" class="type-toggle-group">
           <mat-button-toggle value="cash_in" class="type-btn cash-in">
             <mat-icon>arrow_downward</mat-icon> Cash In
           </mat-button-toggle>
