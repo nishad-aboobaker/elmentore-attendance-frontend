@@ -9,8 +9,8 @@
 
 /* ---- HEADER TOOLBAR ---- */
 mat-toolbar.top-nav-bar {
-  background: #ffffff !important;
-  color: #0f172a !important;
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
   height: 64px !important;
   min-height: 64px !important;
   padding: 0 16px !important;
@@ -62,7 +62,7 @@ mat-toolbar.top-nav-bar {
 .logo-title {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   line-height: 1.2;
   letter-spacing: -0.02em;
   margin: 0 !important;
@@ -73,7 +73,7 @@ mat-toolbar.top-nav-bar {
 .logo-subtitle {
   font-size: 0.65rem;
   font-weight: 500;
-  color: #64748b;
+  color: var(--text-muted);
   line-height: 1.2;
   margin: 0 !important;
   padding: 0 !important;
@@ -96,8 +96,8 @@ mat-toolbar.top-nav-bar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #eff6ff;
-  color: #2563eb;
+  background: var(--primary-light);
+  color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,7 +120,7 @@ mat-toolbar.top-nav-bar {
 .user-name {
   font-size: 0.8rem !important;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   background: transparent;
   padding: 0 !important;
   margin: 0 !important;
@@ -131,7 +131,7 @@ mat-toolbar.top-nav-bar {
 .user-role {
   font-size: 0.65rem;
   font-weight: 500;
-  color: #64748b;
+  color: var(--text-muted);
   line-height: 1.2;
   margin: 0 !important;
   padding: 0 !important;
@@ -172,7 +172,7 @@ mat-toolbar.top-nav-bar {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   height: 68px;
-  background: #ffffff;
+  background: var(--bg-card);
   border-top: 1px solid var(--border);
   box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
   display: flex;
@@ -250,7 +250,7 @@ mat-toolbar.top-nav-bar {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-  border: 4px solid #ffffff;
+  border: 4px solid var(--bg-card);
   transition: transform 0.2s, background-color 0.2s;
 }
 
