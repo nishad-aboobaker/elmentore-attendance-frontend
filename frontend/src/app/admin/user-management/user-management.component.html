@@ -13,7 +13,7 @@
     <div class="user-card" *ngFor="let u of users">
       <div class="user-card-left">
         <div class="user-avatar" [style.background]="u.isActive ? 'var(--primary)' : 'var(--absent)'">
-          {{ u.name?.charAt(0) | uppercase }}
+          {{ u.name.charAt(0) | uppercase }}
         </div>
         <div class="user-info">
           <p class="user-name-text">{{ u.name }}</p>

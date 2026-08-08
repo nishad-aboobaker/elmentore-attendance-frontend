@@ -90,7 +90,7 @@
 
     <div class="session-approvals" *ngIf="sessions.length > 0">
       <div class="approval-row" *ngFor="let s of sessions.slice(0, 3)">
-        <div class="approval-avatar">{{ s.title?.charAt(0) || 'S' }}</div>
+        <div class="approval-avatar">{{ s.title.charAt(0) || 'S' }}</div>
         <div class="approval-info">
           <p class="approval-name">{{ s.title }}</p>
           <p class="approval-sub">{{ s.date | date:'MMM d' }} &bull; {{ s.startTime | timeFormat }} - {{ s.endTime | timeFormat }}</p>

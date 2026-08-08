@@ -71,7 +71,7 @@
         <h4>{{ t.details }}</h4>
         <p class="t-meta">
           <mat-icon>calendar_today</mat-icon> {{ t.date | date:'mediumDate' }} &bull;
-          <mat-icon>person</mat-icon> {{ t.createdBy?.name || 'Admin' }}
+          <mat-icon>person</mat-icon> {{ t.createdBy.name || 'Admin' }}
         </p>
       </div>
       <div class="t-amount" [ngClass]="t.type">
