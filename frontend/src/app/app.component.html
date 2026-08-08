@@ -14,10 +14,6 @@
     </div>
     <div class="nav-right" style="display: flex; align-items: center; gap: 4px;">
       
-      <button mat-icon-button (click)="toggleTheme()" class="theme-toggle-btn" style="color: var(--text-secondary); margin-right: 4px;">
-        <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
-      </button>
-
       <div class="user-profile-menu" [matMenuTriggerFor]="profileMenu" style="cursor: pointer; margin-left: 8px;">
         <div class="avatar">
           <mat-icon>person</mat-icon>
@@ -33,6 +29,10 @@
         <button mat-menu-item routerLink="/employee/profile">
           <mat-icon>person</mat-icon>
           <span>Profile</span>
+        </button>
+        <button mat-menu-item (click)="toggleTheme()">
+          <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          <span>{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
         </button>
         <button mat-menu-item (click)="logout()">
           <mat-icon>exit_to_app</mat-icon>
